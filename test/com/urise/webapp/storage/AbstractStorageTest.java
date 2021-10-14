@@ -59,7 +59,7 @@ public abstract class AbstractStorageTest {
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void  updateNotExist() throws Exception {
+    public void updateNotExist() throws Exception {
         storage.update(R4);
     }
 
@@ -88,9 +88,9 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void delete() throws Exception {
-        storage.delete(UUID_1);
+        storage.delete(UUID_2);
         assertEquals(2, storage.size());
-        storage.get(UUID_1);
+        storage.get(UUID_2);
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -99,7 +99,7 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    public void getAll() throws Exception {
+    public void getAllSorted() throws Exception {
         List<Resume> allResumes = storage.getAllSorted();
         Assert.assertEquals(Arrays.asList(R1, R2, R3), allResumes);
         //  Assert.assertArrayEquals(allResumes, storage.getAll());

@@ -44,14 +44,22 @@ public class Resume {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Resume resume = (Resume) o;
+
+        if (!section.equals(resume.section)) return false;
+        if (!contact.equals(resume.contact)) return false;
         if (!uuid.equals(resume.uuid)) return false;
         return fullName.equals(resume.fullName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(section, contact, uuid, fullName);
+        int result = section.hashCode();
+        result = 31 * result + contact.hashCode();
+        result = 31 * result + uuid.hashCode();
+        result = 31 * result + fullName.hashCode();
+        return result;
     }
 
     @Override
@@ -62,7 +70,5 @@ public class Resume {
                 ", uuid='" + uuid + '\'' +
                 ", fullName='" + fullName + '\'' +
                 '}';
-
-
     }
 }
