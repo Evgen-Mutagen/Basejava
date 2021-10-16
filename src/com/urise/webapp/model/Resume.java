@@ -1,11 +1,15 @@
 package com.urise.webapp.model;
 
+import java.io.Serial;
 import java.util.*;
+import java.io.Serializable;
 
 /**
  * Initial resume class
  */
-public class Resume {
+public class Resume implements Serializable  {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     private Map<SectionType, AbstractSection> section = new EnumMap<>(SectionType.class);
     private Map<ContactType, String> contact = new EnumMap<>(ContactType.class);

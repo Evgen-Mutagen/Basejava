@@ -1,6 +1,5 @@
 package com.urise.webapp.model;
 
-
 import java.time.Month;
 import java.time.YearMonth;
 
@@ -78,6 +77,5 @@ public class ResumeTestData {
 
         System.out.println(R1.getSection());
         System.out.println(R1.getSection().get(SectionType.EDUCATION));
-
     }
 }

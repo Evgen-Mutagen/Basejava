@@ -1,13 +1,18 @@
 package com.urise.webapp.model;
 
+import java.io.Serial;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.io.Serializable;
 
 
 
-public class Organization extends AbstractSection {
+public class Organization extends AbstractSection implements Serializable{
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private final Link homePage;
     private final List<Period> periods = new ArrayList<>();
 
