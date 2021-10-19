@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class PathStorage extends AbstractStorage<Path> {
@@ -48,11 +49,7 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected List<Resume> getAll() {
-        List<Resume> list = new ArrayList<>();
-        for (Path file : checkFiles().toList()) {
-            list.add(getResume(file));
-        }
-        return list;
+        return getFiles().map(this::getResume).collect(Collectors.toList());
     }
 
     @Override
@@ -85,16 +82,16 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     public void clear() {
-        checkFiles().forEach(this::removeResume);
+        getFiles().forEach(this::removeResume);
     }
 
     @Override
     public int size() {
-        return (int) checkFiles().count();
+        return (int) getFiles().count();
 
     }
 
-    public Stream<Path> checkFiles() {
+    public Stream<Path> getFiles() {
         try {
             return Files.list(directory);
         } catch (IOException e) {
