@@ -2,6 +2,7 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
+import com.urise.webapp.storage.strategy.Strategy;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -10,10 +11,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 public class PathStorage extends AbstractStorage<Path> {
     private final Path directory;
-    private Strategy strategy;
+    private final Strategy strategy;
 
     protected PathStorage(String dir, Strategy strategy) {
         directory = Paths.get(dir);
@@ -47,8 +49,8 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected List<Resume> getAll() {
         List<Resume> list = new ArrayList<>();
-        for (File file : Objects.requireNonNull(directory.toFile().listFiles())) {
-            list.add(getResume(file.toPath()));
+        for (Path file : checkFiles().toList()) {
+            list.add(getResume(file));
         }
         return list;
     }
@@ -83,19 +85,20 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     public void clear() {
-        try {
-            Files.list(directory).forEach(this::removeResume);
-        } catch (IOException e) {
-            throw new StorageException("Path delete error", null);
-        }
+        checkFiles().forEach(this::removeResume);
     }
 
     @Override
     public int size() {
+        return (int) checkFiles().count();
+
+    }
+
+    public Stream<Path> checkFiles() {
         try {
-            return (int) Files.list(directory).count();
+            return Files.list(directory);
         } catch (IOException e) {
-            throw new StorageException("IO error", null);
+            throw new StorageException("Path error", null);
         }
     }
 }

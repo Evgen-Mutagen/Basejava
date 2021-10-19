@@ -2,6 +2,7 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
+import com.urise.webapp.storage.strategy.Strategy;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.Objects;
 
 public class FileStorage extends AbstractStorage<File> {
     private final File directory;
-    private Strategy strategy;
+    private final Strategy strategy;
 
     protected FileStorage(File directory, Strategy strategy) {
         Objects.requireNonNull(directory, "directory must not be null");
@@ -45,11 +46,11 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     protected List<Resume> getAll() {
-        List<Resume> list = new ArrayList<>();
-        for (File file : Objects.requireNonNull(directory.listFiles())) {
-            list.add(getResume(file));
+        List<Resume> allFiles = new ArrayList<>();
+        for (File file : chekFiles()) {
+            allFiles.add(getResume(file));
         }
-        return list;
+        return allFiles;
     }
 
     @Override
@@ -68,8 +69,9 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     protected void removeResume(File file) {
-        file.delete();
-
+        if (!file.delete()) {
+            throw new StorageException("IO error", file.getName());
+        }
     }
 
     @Override
@@ -79,17 +81,21 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        if (directory.listFiles() != null) {
-            for (File file : Objects.requireNonNull(directory.listFiles())) {
-                removeResume(file);
-            }
+        for (File file : chekFiles()) {
+            removeResume(file);
         }
     }
 
     @Override
     public int size() {
-        String[] list = directory.list();
-        assert list != null;
-        return list.length;
+        return chekFiles().length;
+    }
+
+    public File[] chekFiles() {
+        File[] list = directory.listFiles();
+        if (list == null) {
+            throw new StorageException("IO Error", directory.getName());
+        }
+        return list;
     }
 }
