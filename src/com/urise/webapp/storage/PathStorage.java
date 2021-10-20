@@ -41,7 +41,7 @@ public class PathStorage extends AbstractStorage<Path> {
             Files.createFile(path);
 
         } catch (IOException e) {
-            throw new StorageException("IO error", path.toString());
+            throw new StorageException("IO error", getFileName(path));
         }
         updateResume(r, path);
     }
@@ -56,7 +56,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             return strategy.doRead(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
-            throw new StorageException("IO error", path.toString(), e);
+            throw new StorageException("IO error", getFileName(path), e);
         }
     }
 
@@ -70,7 +70,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             Files.delete(path);
         } catch (IOException e) {
-            throw new StorageException("IO error", path.toString(), e);
+            throw new StorageException("IO error", getFileName(path), e);
         }
     }
 
@@ -87,7 +87,10 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     public int size() {
         return (int) getFiles().count();
+    }
 
+    private String getFileName(Path path) {
+        return path.getFileName().toString();
     }
 
     public Stream<Path> getFiles() {
