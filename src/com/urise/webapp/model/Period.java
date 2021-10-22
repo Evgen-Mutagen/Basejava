@@ -1,7 +1,10 @@
 package com.urise.webapp.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import java.time.YearMonth;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Period {
     private final YearMonth startOfWork;
     private final YearMonth endOfWork;

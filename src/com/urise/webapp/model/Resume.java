@@ -1,12 +1,20 @@
 package com.urise.webapp.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serial;
-import java.util.*;
 import java.io.Serializable;
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Initial resume class
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Resume implements Serializable  {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -14,8 +22,8 @@ public class Resume implements Serializable  {
     private Map<SectionType, AbstractSection> section = new EnumMap<>(SectionType.class);
     private Map<ContactType, String> contact = new EnumMap<>(ContactType.class);
 
-    private final String uuid;
-    private final String fullName;
+    private  String uuid;
+    private String fullName;
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -26,6 +34,9 @@ public class Resume implements Serializable  {
         Objects.requireNonNull(fullName, "fullName must non be  null ");
         this.uuid = uuid;
         this.fullName = fullName;
+    }
+
+    public Resume() {
     }
 
     public String getUuid() {
