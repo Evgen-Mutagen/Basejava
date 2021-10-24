@@ -19,8 +19,8 @@ public class Resume implements Serializable  {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private Map<SectionType, AbstractSection> section = new EnumMap<>(SectionType.class);
-    private Map<ContactType, String> contact = new EnumMap<>(ContactType.class);
+    private Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
+    private Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
 
     private  String uuid;
     private String fullName;
@@ -47,12 +47,21 @@ public class Resume implements Serializable  {
         return fullName;
     }
 
-    public Map<SectionType, AbstractSection> getSection() {
-        return section;
+    public Map<SectionType, AbstractSection> getSections() {
+        return sections;
     }
 
-    public Map<ContactType, String> getContact() {
-        return contact;
+    public Map<ContactType, String> getContacts() {
+        return contacts;
+    }
+
+
+    public void addContact(ContactType type, String value) {
+        contacts.put(type, value);
+    }
+
+    public void addSection(SectionType type, AbstractSection section) {
+        sections.put(type, section);
     }
 
     @Override
@@ -62,16 +71,16 @@ public class Resume implements Serializable  {
 
         Resume resume = (Resume) o;
 
-        if (!section.equals(resume.section)) return false;
-        if (!contact.equals(resume.contact)) return false;
+        if (!sections.equals(resume.sections)) return false;
+        if (!contacts.equals(resume.contacts)) return false;
         if (!uuid.equals(resume.uuid)) return false;
         return fullName.equals(resume.fullName);
     }
 
     @Override
     public int hashCode() {
-        int result = section.hashCode();
-        result = 31 * result + contact.hashCode();
+        int result = sections.hashCode();
+        result = 31 * result + contacts.hashCode();
         result = 31 * result + uuid.hashCode();
         result = 31 * result + fullName.hashCode();
         return result;
@@ -80,8 +89,8 @@ public class Resume implements Serializable  {
     @Override
     public String toString() {
         return "Resume{" +
-                "section=" + section +
-                ", contact=" + contact +
+                "section=" + sections +
+                ", contact=" + contacts +
                 ", uuid='" + uuid + '\'' +
                 ", fullName='" + fullName + '\'' +
                 '}';
