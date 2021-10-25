@@ -11,12 +11,11 @@ import java.util.Objects;
 
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Organization extends AbstractSection implements Serializable{
+public class Organization extends AbstractSection implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-
     private final Link homePage;
-    private final List<Period> periods = new ArrayList<>();
+    private List<Period> periods = new ArrayList<>();
 
     public Organization(String name, String url, YearMonth startOfWork, YearMonth endOfWork, String title, String description) {
         Objects.requireNonNull(name, "name must not be null");
@@ -27,8 +26,23 @@ public class Organization extends AbstractSection implements Serializable{
         this.periods.add(new Period(startOfWork, endOfWork, title, description));
     }
 
+
+    public Organization(Link homePage, List<Period> periods) {
+        this.homePage = homePage;
+        this.periods = periods;
+    }
+
+
     public void addPeriod(YearMonth startOfWork, YearMonth endOfWork, String title, String description) {
         this.periods.add(new Period(startOfWork, endOfWork, title, description));
+    }
+
+    public Link getHomePage() {
+        return homePage;
+    }
+
+    public List<Period> getPeriods() {
+        return periods;
     }
 
     @Override

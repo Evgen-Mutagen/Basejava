@@ -12,9 +12,21 @@ public class OrganizationSection extends AbstractSection {
     @Serial
     private static final long serialVersionUID = 1L;
     private final List<Organization> list = new ArrayList<>();
+    private List<Organization> organisation;
+
+    public OrganizationSection(List<Organization> organisation) {
+        this.organisation = organisation;
+    }
+
+    public OrganizationSection() {
+    }
 
     public void save(Organization name) {
         list.add(name);
+    }
+
+    public List<Organization> getList() {
+        return list;
     }
 
     @Override

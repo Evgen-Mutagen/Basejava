@@ -9,7 +9,11 @@ public class ListSection extends AbstractSection {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private final List<String> list = new ArrayList<>();
+    private List<String> list = new ArrayList<>();
+
+    public ListSection(List<String> list) {
+        this.list = list;
+    }
 
     public void save(String text) {
         list.add(text);

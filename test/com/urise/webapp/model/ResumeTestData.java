@@ -2,6 +2,7 @@ package com.urise.webapp.model;
 
 import java.time.Month;
 import java.time.YearMonth;
+import java.util.ArrayList;
 
 public class ResumeTestData {
     public static final Resume R1;
@@ -17,32 +18,32 @@ public class ResumeTestData {
     }
 
     public static void main(String[] args) {
-        R1.getContacts().put(ContactType.MOBILE_PHONE, " +7(921) 855-0482");
-        R1.getContacts().put(ContactType.MAIL, " gkislin@yandex.ru");
-        R1.getContacts().put(ContactType.SKYPE, "grigory.kislin");
-        R1.getContacts().put(ContactType.GITHUB, "github.com/gkislin");
-        R1.getContacts().put(ContactType.STACKOVERFLOW, "stackoverflow.com/users/548473/grigory-kislin");
+        R1.addContact(ContactType.MOBILE_PHONE, " +7(921) 855-0482");
+        R1.addContact(ContactType.MAIL, " gkislin@yandex.ru");
+        R1.addContact(ContactType.SKYPE, "grigory.kislin");
+        R1.addContact(ContactType.GITHUB, "github.com/gkislin");
+        R1.addContact(ContactType.STACKOVERFLOW, "stackoverflow.com/users/548473/grigory-kislin");
         System.out.println(R1.getContacts());
         System.out.println(R1.getContacts().get(ContactType.MOBILE_PHONE));
 
         TextSection personal = new TextSection("Аналитический склад ума, сильная логика, креативность," +
                 " инициативность. Пурист кода и архитектуры.");
-        R1.getSections().put(SectionType.PERSONAL, personal);
+        R1.addSection(SectionType.PERSONAL, personal);
 
         TextSection objective = new TextSection("Ведущий стажировок и корпоративного обучения по Java Web" +
                 " и Enterprise технологиям");
-        R1.getSections().put(SectionType.OBJECTIVE, objective);
+        R1.addSection(SectionType.OBJECTIVE, objective);
 
-        ListSection qualification = new ListSection();
+        ListSection qualification = new ListSection(new ArrayList<>());
         qualification.save("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
-        R1.getSections().put(SectionType.QUALIFICATIONS, qualification);
+        R1.addSection(SectionType.QUALIFICATIONS, qualification);
 
-        ListSection achievement = new ListSection();
+        ListSection achievement = new ListSection(new ArrayList<>());
         achievement.save("С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", " +
                 "\"Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP)." +
                 " Удаленное взаимодействие (JMS/AKKA)\". Организация онлайн стажировок и " +
                 "ведение проектов. Более 1000 выпускников.");
-        R1.getSections().put(SectionType.ACHIEVEMENT, achievement);
+        R1.addSection(SectionType.ACHIEVEMENT, achievement);
 
         String name = "Wrike";
         String url = "https://www.wrike.com";
@@ -57,7 +58,7 @@ public class ResumeTestData {
 
         OrganizationSection companyName = new OrganizationSection();
         companyName.save(company);
-        R1.getSections().put(SectionType.EXPERIENCE, companyName);
+        R1.addSection(SectionType.EXPERIENCE, companyName);
 
         name = "Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики";
         url = "https://itmo.ru/ru/";
@@ -73,7 +74,7 @@ public class ResumeTestData {
         endOfWork = YearMonth.of(1993, Month.JULY);
 
         univesety.addPeriod(startOfWork, endOfWork, title, description);
-        R1.getSections().put(SectionType.EDUCATION, univesety);
+        R1.addSection(SectionType.EDUCATION, univesety);
 
         System.out.println(R1.getSections());
         System.out.println(R1.getSections().get(SectionType.EDUCATION));
