@@ -1,7 +1,6 @@
 package com.urise.webapp.model;
 
 import java.io.Serial;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -9,7 +8,7 @@ public class ListSection extends AbstractSection {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private List<String> list = new ArrayList<>();
+    private List<String> list;
 
     public ListSection(List<String> list) {
         this.list = list;
@@ -21,6 +20,9 @@ public class ListSection extends AbstractSection {
 
     public List<String> getList() {
         return list;
+    }
+
+    public ListSection() {
     }
 
     @Override

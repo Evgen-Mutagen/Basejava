@@ -28,11 +28,14 @@ public abstract class AbstractStorageTest {
     private static final Resume R3;
     private static final Resume R4;
 
+
+
     static {
-        R1 = ResumeTestData.R1;
-        R2 = ResumeTestData.R2;
-        R3 = ResumeTestData.R3;
-        R4 = ResumeTestData.R4;
+        R1 = ResumeTestData.RESUME_1;
+        R2 = ResumeTestData.RESUME_2;
+        R3 = ResumeTestData.RESUME_3;
+        R4 = ResumeTestData.RESUME_4;
+        ResumeTestData.getResume(UUID_1, R1.getFullName());
     }
 
     protected AbstractStorageTest(Storage storage) {

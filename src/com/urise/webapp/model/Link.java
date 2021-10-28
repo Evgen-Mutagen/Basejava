@@ -11,8 +11,8 @@ public class Link implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private final String name;
-    private final String url;
+    private  String name;
+    private  String url;
 
 
     public Link(String name, String url) {
@@ -44,6 +44,9 @@ public class Link implements Serializable {
         if (!name.equals(link.name)) return false;
         return Objects.equals(url, link.url);
 
+    }
+
+    public Link() {
     }
 
     @Override

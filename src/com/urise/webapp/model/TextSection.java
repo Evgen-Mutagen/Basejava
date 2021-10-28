@@ -14,6 +14,9 @@ public class TextSection extends AbstractSection {
         return title;
     }
 
+    public TextSection() {
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

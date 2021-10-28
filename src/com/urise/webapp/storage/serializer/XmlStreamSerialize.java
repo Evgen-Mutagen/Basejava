@@ -13,7 +13,8 @@ public class XmlStreamSerialize {
         public XmlStreamSerializer() {
             xmlParser = new XmlParser(
                     Resume.class, Organization.class, Link.class,
-                    OrganizationSection.class, TextSection.class, ListSection.class, Organization.class, Period.class);
+                    OrganizationSection.class, TextSection.class, ListSection.class, Organization.class,
+                    Organization.Position.class);
         }
 
         @Override

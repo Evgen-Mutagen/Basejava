@@ -1,82 +1,71 @@
 package com.urise.webapp.model;
 
 import java.time.Month;
-import java.time.YearMonth;
 import java.util.ArrayList;
 
 public class ResumeTestData {
-    public static final Resume R1;
-    public static final Resume R2;
-    public static final Resume R3;
-    public static final Resume R4;
+    public static final Resume RESUME_1;
+    public static final Resume RESUME_2;
+    public static final Resume RESUME_3;
+    public static final Resume RESUME_4;
 
     static {
-        R1 = new Resume("uuid1", "Grigory Kislin");
-        R2 = new Resume("uuid2", "name2");
-        R3 = new Resume("uuid3", "name3");
-        R4 = new Resume("uuid4", "name4");
+        RESUME_1 = new Resume("uuid1", "Grigory Kislin");
+        RESUME_2 = new Resume("uuid2", "name2");
+        RESUME_3 = new Resume("uuid3", "name3");
+        RESUME_4 = new Resume("uuid4", "name4");
+        getResume("uuid1", "Grigory Kislin");
     }
 
     public static void main(String[] args) {
-        R1.addContact(ContactType.MOBILE_PHONE, " +7(921) 855-0482");
-        R1.addContact(ContactType.MAIL, " gkislin@yandex.ru");
-        R1.addContact(ContactType.SKYPE, "grigory.kislin");
-        R1.addContact(ContactType.GITHUB, "github.com/gkislin");
-        R1.addContact(ContactType.STACKOVERFLOW, "stackoverflow.com/users/548473/grigory-kislin");
-        System.out.println(R1.getContacts());
-        System.out.println(R1.getContacts().get(ContactType.MOBILE_PHONE));
 
+        System.out.println(RESUME_1.getContacts());
+        System.out.println(RESUME_1.getContacts().get(ContactType.MOBILE_PHONE));
+        System.out.println(RESUME_1.getSections());
+        System.out.println(RESUME_1.getSections().get(SectionType.EDUCATION));
+    }
+
+    public static Resume getResume(String uuid, String fullName) {
+        RESUME_1.addContact(ContactType.MOBILE_PHONE, " +7(921) 855-0482");
+        RESUME_1.addContact(ContactType.MAIL, " gkislin@yandex.ru");
+        RESUME_1.addContact(ContactType.SKYPE, "grigory.kislin");
+        RESUME_1.addContact(ContactType.GITHUB, "github.com/gkislin");
+        RESUME_1.addContact(ContactType.STACKOVERFLOW, "stackoverflow.com/users/548473/grigory-kislin");
         TextSection personal = new TextSection("Аналитический склад ума, сильная логика, креативность," +
                 " инициативность. Пурист кода и архитектуры.");
-        R1.addSection(SectionType.PERSONAL, personal);
+        RESUME_1.addSection(SectionType.PERSONAL, personal);
 
         TextSection objective = new TextSection("Ведущий стажировок и корпоративного обучения по Java Web" +
                 " и Enterprise технологиям");
-        R1.addSection(SectionType.OBJECTIVE, objective);
+        RESUME_1.addSection(SectionType.OBJECTIVE, objective);
 
         ListSection qualification = new ListSection(new ArrayList<>());
         qualification.save("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
-        R1.addSection(SectionType.QUALIFICATIONS, qualification);
+        RESUME_1.addSection(SectionType.QUALIFICATIONS, qualification);
 
         ListSection achievement = new ListSection(new ArrayList<>());
         achievement.save("С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", " +
                 "\"Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP)." +
                 " Удаленное взаимодействие (JMS/AKKA)\". Организация онлайн стажировок и " +
                 "ведение проектов. Более 1000 выпускников.");
-        R1.addSection(SectionType.ACHIEVEMENT, achievement);
+        RESUME_1.addSection(SectionType.ACHIEVEMENT, achievement);
 
-        String name = "Wrike";
-        String url = "https://www.wrike.com";
-        String title = "Старший разработчик (backend)";
-        YearMonth startOfWork = YearMonth.of(2014, Month.OCTOBER);
-        YearMonth endOfWork = YearMonth.of(2016, Month.JANUARY);
-        String description = ("Старший разработчик (backend)\n" +
-                "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring," +
-                " MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, " +
-                "авторизация по OAuth1, OAuth2, JWT SSO.");
-        Organization company = new Organization(name, url, startOfWork, endOfWork, title, description);
+        RESUME_1.addSection(SectionType.EXPERIENCE, new OrganizationSection(new Organization(
+                "Wrike", "https://www.wrike.com",
+                new Organization.Position(2014, Month.OCTOBER, 2016, Month.JANUARY,
+                        "Старший разработчик (backend)", "Проектирование и разработка онлайн платформы" +
+                        " управления проектами Wrike (Java 8 API, Maven, Spring," +
+                        " MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, " +
+                        "авторизация по OAuth1, OAuth2, JWT SSO."))));
 
-        OrganizationSection companyName = new OrganizationSection();
-        companyName.save(company);
-        R1.addSection(SectionType.EXPERIENCE, companyName);
+        RESUME_1.addSection(SectionType.EDUCATION, new OrganizationSection(new Organization("Санкт-Петербургский " +
+                "национальный исследовательский университет информационных технологий, механики и оптики",
+                "https://itmo.ru/ru/",
+                new Organization.Position(1987, Month.SEPTEMBER,
+                        1993, Month.JULY, "Инженер (программист Fortran, C)", " "),
+                new Organization.Position(1993, Month.SEPTEMBER, 1996, Month.JULY,
+                        "Аспирантура (программист С, С++)", " "))));
 
-        name = "Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики";
-        url = "https://itmo.ru/ru/";
-        title = "Инженер (программист Fortran, C)";
-        startOfWork = YearMonth.of(1993, Month.SEPTEMBER);
-        endOfWork = YearMonth.of(1996, Month.JULY);
-        description = " ";
-
-        Organization univesety = new Organization(name, url, startOfWork, endOfWork, title, description);
-
-        title = "Аспирантура (программист С, С++)";
-        startOfWork = YearMonth.of(1987, Month.SEPTEMBER);
-        endOfWork = YearMonth.of(1993, Month.JULY);
-
-        univesety.addPeriod(startOfWork, endOfWork, title, description);
-        R1.addSection(SectionType.EDUCATION, univesety);
-
-        System.out.println(R1.getSections());
-        System.out.println(R1.getSections().get(SectionType.EDUCATION));
+        return RESUME_1;
     }
 }
