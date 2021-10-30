@@ -27,20 +27,17 @@ public class DataStreamSerializer implements StreamSerializer {
                 SectionType key = entry.getKey();
                 dos.writeUTF(key.name());
                 switch (key) {
-                    case PERSONAL:
-                    case OBJECTIVE:
+                    case PERSONAL, OBJECTIVE -> {
                         TextSection textSection = (TextSection) entry.getValue();
                         dos.writeUTF(textSection.getTitle());
-                        break;
-                    case ACHIEVEMENT:
-                    case QUALIFICATIONS:
+                    }
+                    case ACHIEVEMENT, QUALIFICATIONS -> {
                         ListSection listSection = (ListSection) entry.getValue();
                         for (String str : listSection.getList()) {
                             dos.writeUTF(str);
                         }
-                        break;
-                    case EDUCATION:
-                    case EXPERIENCE:
+                    }
+                    case EDUCATION, EXPERIENCE -> {
                         OrganizationSection organizationSection = (OrganizationSection) entry.getValue();
                         for (Organization org : organizationSection.getOrganizations()) {
                             dos.writeUTF(org.getHomePage().getName());
@@ -52,6 +49,7 @@ public class DataStreamSerializer implements StreamSerializer {
                                 dos.writeUTF(pos.getDescription());
                             }
                         }
+                    }
                 }
             }
         }
@@ -68,20 +66,23 @@ public class DataStreamSerializer implements StreamSerializer {
                 resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
             }
 
-            for (int i = 0; i < size; i++) {
+            int sectionsSize = dis.readInt();
+            for (int i = 0; i < sectionsSize; i++) {
                 SectionType section = SectionType.valueOf(dis.readUTF());
                 switch (section) {
                     case PERSONAL:
                     case OBJECTIVE:
                         resume.addSection(section, new TextSection(dis.readUTF()));
+                        break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
                         int listSectionSize = dis.readInt();
-                        ListSection listSection = new ListSection(new ArrayList<>());
+                        List<String> listSection = new ArrayList<>(listSectionSize);
                         for (int j = 0; j < listSectionSize; j++) {
-                            listSection.save(dis.readUTF());
+                            listSection.add(dis.readUTF());
                         }
-                        resume.addSection(SectionType.valueOf(dis.readUTF()), listSection);
+                        resume.addSection(section, new ListSection(listSection));
+                        break;
                     case EXPERIENCE:
                     case EDUCATION:
                         List<Organization> org = new ArrayList<>();
