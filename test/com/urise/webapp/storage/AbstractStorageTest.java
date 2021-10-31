@@ -28,8 +28,6 @@ public abstract class AbstractStorageTest {
     private static final Resume R3;
     private static final Resume R4;
 
-
-
     static {
         R1 = ResumeTestData.RESUME_1;
         R2 = ResumeTestData.RESUME_2;
@@ -106,7 +104,8 @@ public abstract class AbstractStorageTest {
     @Test
     public void getAllSorted() throws Exception {
         List<Resume> allResumes = storage.getAllSorted();
-        Assert.assertEquals(Arrays.asList(R1, R2, R3), allResumes);
+        assertEquals(3, allResumes.size());
+        assertEquals(Arrays.asList(R1, R2, R3), allResumes);
         //  Assert.assertArrayEquals(allResumes, storage.getAll());
     }
 

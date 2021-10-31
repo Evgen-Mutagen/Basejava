@@ -14,11 +14,10 @@ public class ResumeTestData {
         RESUME_2 = new Resume("uuid2", "name2");
         RESUME_3 = new Resume("uuid3", "name3");
         RESUME_4 = new Resume("uuid4", "name4");
-        getResume("uuid1", "Grigory Kislin");
     }
 
     public static void main(String[] args) {
-
+        getResume("uuid1", "Grigory Kislin");
         System.out.println(RESUME_1.getContacts());
         System.out.println(RESUME_1.getContacts().get(ContactType.MOBILE_PHONE));
         System.out.println(RESUME_1.getSections());

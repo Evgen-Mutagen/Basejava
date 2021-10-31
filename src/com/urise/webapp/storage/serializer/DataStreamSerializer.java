@@ -63,39 +63,40 @@ public class DataStreamSerializer implements StreamSerializer {
             Resume resume = new Resume(uuid, fullName);
             int size = dis.readInt();
             for (int i = 0; i < size; i++) {
-                resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
+                resume.addContact(ContactType.valueOf(readData(dis)), readData(dis));
             }
 
             int sectionsSize = dis.readInt();
             for (int i = 0; i < sectionsSize; i++) {
-                SectionType section = SectionType.valueOf(dis.readUTF());
+                SectionType section = SectionType.valueOf(readData(dis));
                 switch (section) {
                     case PERSONAL:
                     case OBJECTIVE:
-                        resume.addSection(section, new TextSection(dis.readUTF()));
+                        resume.addSection(section, new TextSection(readData(dis)));
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        int listSectionSize = dis.readInt();
-                        List<String> listSection = new ArrayList<>(listSectionSize);
-                        for (int j = 0; j < listSectionSize; j++) {
-                            listSection.add(dis.readUTF());
+                        int listSize = dis.readInt();
+                        List<String>  listSection = new ArrayList<>(listSize);
+                        for (int j = 0; j < listSize; j++) {
+                            listSection.add(readData(dis));
                         }
                         resume.addSection(section, new ListSection(listSection));
                         break;
+
                     case EXPERIENCE:
                     case EDUCATION:
                         List<Organization> org = new ArrayList<>();
                         int positionOrgSize = dis.readInt();
                         for (int k = 0; k < positionOrgSize; k++) {
-                            Link link = new Link(dis.readUTF(), dis.readUTF());
+                            Link link = new Link(readData(dis), readData(dis));
                             List<Organization.Position> pos = new ArrayList<>();
                             int positionListSize = dis.readInt();
                             for (int m = 0; m < positionListSize; m++) {
-                                LocalDate startDate = LocalDate.parse(dis.readUTF());
-                                LocalDate endDate = LocalDate.parse(dis.readUTF());
-                                String title = dis.readUTF();
-                                String description = dis.readUTF();
+                                LocalDate startDate = LocalDate.parse(readData(dis));
+                                LocalDate endDate = LocalDate.parse(readData(dis));
+                                String title = readData(dis);
+                                String description = readData(dis);
                                 pos.add(new Organization.Position(startDate, endDate, title, description));
                             }
                             org.add(new Organization(link, pos));
@@ -105,5 +106,9 @@ public class DataStreamSerializer implements StreamSerializer {
             }
             return resume;
         }
+    }
+
+    private String readData(DataInputStream dis) throws IOException {
+        return dis.readUTF();
     }
 }
