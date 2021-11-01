@@ -21,8 +21,9 @@ public class DataStreamSerializer implements StreamSerializer {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
             }
+
             Map<SectionType, AbstractSection> section = r.getSections();
-            dos.writeInt(contacts.size());
+            dos.writeInt(section.size());
             for (Map.Entry<SectionType, AbstractSection> entry : section.entrySet()) {
                 SectionType key = entry.getKey();
                 dos.writeUTF(key.name());
@@ -33,15 +34,19 @@ public class DataStreamSerializer implements StreamSerializer {
                     }
                     case ACHIEVEMENT, QUALIFICATIONS -> {
                         ListSection listSection = (ListSection) entry.getValue();
+                        dos.writeInt(listSection.getList().size());
                         for (String str : listSection.getList()) {
                             dos.writeUTF(str);
                         }
+
                     }
                     case EDUCATION, EXPERIENCE -> {
                         OrganizationSection organizationSection = (OrganizationSection) entry.getValue();
+                        dos.writeInt(organizationSection.getOrganizations().size());
                         for (Organization org : organizationSection.getOrganizations()) {
                             dos.writeUTF(org.getHomePage().getName());
                             dos.writeUTF(org.getHomePage().getUrl());
+                            dos.writeInt(org.getPositions().size());
                             for (Organization.Position pos : org.getPositions()) {
                                 dos.writeUTF(pos.getStartDate().toString());
                                 dos.writeUTF(pos.getEndDate().toString());
@@ -70,22 +75,16 @@ public class DataStreamSerializer implements StreamSerializer {
             for (int i = 0; i < sectionsSize; i++) {
                 SectionType section = SectionType.valueOf(readData(dis));
                 switch (section) {
-                    case PERSONAL:
-                    case OBJECTIVE:
-                        resume.addSection(section, new TextSection(readData(dis)));
-                        break;
-                    case ACHIEVEMENT:
-                    case QUALIFICATIONS:
-                        int listSize = dis.readInt();
-                        List<String>  listSection = new ArrayList<>(listSize);
-                        for (int j = 0; j < listSize; j++) {
+                    case PERSONAL, OBJECTIVE -> resume.addSection(section, new TextSection(readData(dis)));
+                    case ACHIEVEMENT, QUALIFICATIONS -> {
+                        int listSectionSize = dis.readInt();
+                        List<String> listSection = new ArrayList<>(listSectionSize);
+                        for (int j = 0; j < listSectionSize; j++) {
                             listSection.add(readData(dis));
                         }
                         resume.addSection(section, new ListSection(listSection));
-                        break;
-
-                    case EXPERIENCE:
-                    case EDUCATION:
+                    }
+                    case EXPERIENCE, EDUCATION -> {
                         List<Organization> org = new ArrayList<>();
                         int positionOrgSize = dis.readInt();
                         for (int k = 0; k < positionOrgSize; k++) {
@@ -101,7 +100,8 @@ public class DataStreamSerializer implements StreamSerializer {
                             }
                             org.add(new Organization(link, pos));
                         }
-                        resume.addSection(SectionType.valueOf(dis.readUTF()), new OrganizationSection(org));
+                        resume.addSection(section, new OrganizationSection(org));
+                    }
                 }
             }
             return resume;
