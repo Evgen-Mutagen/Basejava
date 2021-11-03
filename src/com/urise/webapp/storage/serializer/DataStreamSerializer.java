@@ -4,9 +4,7 @@ import com.urise.webapp.model.*;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DataStreamSerializer implements StreamSerializer {
 
@@ -15,16 +13,15 @@ public class DataStreamSerializer implements StreamSerializer {
         try (DataOutputStream dos = new DataOutputStream(os)) {
             dos.writeUTF(r.getUuid());
             dos.writeUTF(r.getFullName());
+
             Map<ContactType, String> contacts = r.getContacts();
-            dos.writeInt(contacts.size());
-            for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
+            writeWithException(contacts.entrySet(), dos, entry -> {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
-            }
+            });
 
             Map<SectionType, AbstractSection> section = r.getSections();
-            dos.writeInt(section.size());
-            for (Map.Entry<SectionType, AbstractSection> entry : section.entrySet()) {
+            writeWithException(section.entrySet(), dos, entry -> {
                 SectionType key = entry.getKey();
                 dos.writeUTF(key.name());
                 switch (key) {
@@ -34,29 +31,26 @@ public class DataStreamSerializer implements StreamSerializer {
                     }
                     case ACHIEVEMENT, QUALIFICATIONS -> {
                         ListSection listSection = (ListSection) entry.getValue();
-                        dos.writeInt(listSection.getList().size());
-                        for (String str : listSection.getList()) {
+                        writeWithException(listSection.getList(), dos, str -> {
                             dos.writeUTF(str);
-                        }
-
+                        });
                     }
                     case EDUCATION, EXPERIENCE -> {
                         OrganizationSection organizationSection = (OrganizationSection) entry.getValue();
-                        dos.writeInt(organizationSection.getOrganizations().size());
-                        for (Organization org : organizationSection.getOrganizations()) {
-                            dos.writeUTF(org.getHomePage().getName());
-                            dos.writeUTF(org.getHomePage().getUrl());
-                            dos.writeInt(org.getPositions().size());
-                            for (Organization.Position pos : org.getPositions()) {
-                                dos.writeUTF(pos.getStartDate().toString());
-                                dos.writeUTF(pos.getEndDate().toString());
+                        writeWithException(organizationSection.getOrganizations(), dos, org -> {
+                            Link homePage = org.getHomePage();
+                            writeIfNull(String.valueOf(homePage.getName()), dos);
+                            writeIfNull(String.valueOf(homePage.getUrl()), dos);
+                            writeWithException(org.getPositions(), dos, pos -> {
+                                dos.writeUTF(writeDates(pos.getStartDate()));
+                                dos.writeUTF(writeDates(pos.getEndDate()));
                                 dos.writeUTF(pos.getTitle());
                                 dos.writeUTF(pos.getDescription());
-                            }
-                        }
+                            });
+                        });
                     }
                 }
-            }
+            });
         }
     }
 
@@ -88,12 +82,12 @@ public class DataStreamSerializer implements StreamSerializer {
                         List<Organization> org = new ArrayList<>();
                         int positionOrgSize = dis.readInt();
                         for (int k = 0; k < positionOrgSize; k++) {
-                            Link link = new Link(readData(dis), readData(dis));
+                            Link link = new Link(readIfNull(dis), readIfNull(dis));
                             List<Organization.Position> pos = new ArrayList<>();
                             int positionListSize = dis.readInt();
                             for (int m = 0; m < positionListSize; m++) {
-                                LocalDate startDate = LocalDate.parse(readData(dis));
-                                LocalDate endDate = LocalDate.parse(readData(dis));
+                                LocalDate startDate = ReadDates(dis);
+                                LocalDate endDate = ReadDates(dis);
                                 String title = readData(dis);
                                 String description = readData(dis);
                                 pos.add(new Organization.Position(startDate, endDate, title, description));
@@ -106,6 +100,42 @@ public class DataStreamSerializer implements StreamSerializer {
             }
             return resume;
         }
+    }
+
+    @FunctionalInterface
+    interface Write<T> {
+        void write(T t) throws IOException;
+    }
+
+    private <T> void writeWithException(Collection<T> collection, DataOutputStream dos, Write<T> obj) throws IOException {
+        dos.writeInt(collection.size());
+        for (T col : collection) {
+            obj.write(col);
+        }
+    }
+
+    private void writeIfNull(String str, DataOutputStream dos) throws IOException {
+        if (str == null) {
+            dos.writeUTF("");
+        } else {
+            dos.writeUTF(str);
+        }
+    }
+
+    private String writeDates(LocalDate date) {
+        return String.valueOf(date);
+    }
+
+    private String readIfNull(DataInputStream dis) throws IOException {
+        String str = dis.readUTF();
+        if (str.equals("")) {
+            return null;
+        }
+        return str;
+    }
+
+    private LocalDate ReadDates(DataInputStream dis) throws IOException {
+        return LocalDate.parse(dis.readUTF());
     }
 
     private String readData(DataInputStream dis) throws IOException {
