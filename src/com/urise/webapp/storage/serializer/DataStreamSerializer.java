@@ -75,13 +75,13 @@ public class DataStreamSerializer implements StreamSerializer {
                     case EXPERIENCE, EDUCATION -> {
                         List<Organization> org = new ArrayList<>();
                         readWithException(dis, () -> {
-                            Link link = new Link(readIfNull(dis), readIfNull(dis));
+                            Link link = new Link(readStr(dis), readIfNull(dis));
                             List<Organization.Position> pos = new ArrayList<>();
                             readWithException(dis, () -> {
                                 LocalDate startDate = readDate(dis);
                                 LocalDate endDate = readDate(dis);
                                 String title = readStr(dis);
-                                String description = readStr(dis);
+                                String description = readIfNull(dis);
                                 pos.add(new Organization.Position(startDate, endDate, title, description));
                             });
                             org.add(new Organization(link, pos));
