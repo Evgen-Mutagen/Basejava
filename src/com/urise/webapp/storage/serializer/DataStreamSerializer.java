@@ -69,7 +69,7 @@ public class DataStreamSerializer implements StreamSerializer {
                     case PERSONAL, OBJECTIVE -> resume.addSection(section, new TextSection(readStr(dis)));
                     case ACHIEVEMENT, QUALIFICATIONS -> {
                         List<String> listSection = new ArrayList<>();
-                        readWithException(dis, () -> listSection.add(dis.readUTF()));
+                        readWithException(dis, () -> listSection.add(readStr(dis)));
                         resume.addSection(section, new ListSection(listSection));
                     }
                     case EXPERIENCE, EDUCATION -> {
