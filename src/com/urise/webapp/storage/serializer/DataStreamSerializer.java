@@ -11,41 +11,41 @@ public class DataStreamSerializer implements StreamSerializer {
     @Override
     public void doWrite(Resume r, OutputStream os) throws IOException {
         try (DataOutputStream dos = new DataOutputStream(os)) {
-            dos.writeUTF(r.getUuid());
-            dos.writeUTF(r.getFullName());
+            writeStr(r.getUuid(), dos);
+            writeStr(r.getFullName(), dos);
 
             Map<ContactType, String> contacts = r.getContacts();
             writeWithException(contacts.entrySet(), dos, entry -> {
-                dos.writeUTF(entry.getKey().name());
-                dos.writeUTF(entry.getValue());
+                writeStr(entry.getKey().name(), dos);
+                writeStr(entry.getValue(), dos);
             });
 
             Map<SectionType, AbstractSection> section = r.getSections();
             writeWithException(section.entrySet(), dos, entry -> {
                 SectionType key = entry.getKey();
-                dos.writeUTF(key.name());
+                writeStr(key.name(), dos);
                 switch (key) {
                     case PERSONAL, OBJECTIVE -> {
                         TextSection textSection = (TextSection) entry.getValue();
-                        dos.writeUTF(textSection.getTitle());
+                        writeStr(textSection.getTitle(), dos);
                     }
                     case ACHIEVEMENT, QUALIFICATIONS -> {
                         ListSection listSection = (ListSection) entry.getValue();
                         writeWithException(listSection.getList(), dos, str -> {
-                            dos.writeUTF(str);
+                            writeStr(str, dos);
                         });
                     }
                     case EDUCATION, EXPERIENCE -> {
                         OrganizationSection organizationSection = (OrganizationSection) entry.getValue();
                         writeWithException(organizationSection.getOrganizations(), dos, org -> {
                             Link homePage = org.getHomePage();
-                            writeIfNull(String.valueOf(homePage.getName()), dos);
-                            writeIfNull(String.valueOf(homePage.getUrl()), dos);
+                            writeStr(homePage.getName(), dos);
+                            writeIfNull(homePage.getUrl(), dos);
                             writeWithException(org.getPositions(), dos, pos -> {
-                                dos.writeUTF(writeDates(pos.getStartDate()));
-                                dos.writeUTF(writeDates(pos.getEndDate()));
-                                dos.writeUTF(pos.getTitle());
-                                dos.writeUTF(pos.getDescription());
+                                writeStr(String.valueOf(writeDate(pos.getStartDate())), dos);
+                                writeStr(String.valueOf(writeDate(pos.getEndDate())), dos);
+                                writeStr(pos.getTitle(), dos);
+                                writeIfNull(pos.getDescription(), dos);
                             });
                         });
                     }
@@ -60,54 +60,47 @@ public class DataStreamSerializer implements StreamSerializer {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
-            int size = dis.readInt();
-            for (int i = 0; i < size; i++) {
-                resume.addContact(ContactType.valueOf(readData(dis)), readData(dis));
-            }
+            readWithException(dis, () ->
+                    resume.addContact(ContactType.valueOf(readStr(dis)), readStr(dis)));
 
-            int sectionsSize = dis.readInt();
-            for (int i = 0; i < sectionsSize; i++) {
-                SectionType section = SectionType.valueOf(readData(dis));
+            readWithException(dis, () -> {
+                SectionType section = SectionType.valueOf(readStr(dis));
                 switch (section) {
-                    case PERSONAL, OBJECTIVE -> resume.addSection(section, new TextSection(readData(dis)));
+                    case PERSONAL, OBJECTIVE -> resume.addSection(section, new TextSection(readStr(dis)));
                     case ACHIEVEMENT, QUALIFICATIONS -> {
-                        int listSectionSize = dis.readInt();
-                        List<String> listSection = new ArrayList<>(listSectionSize);
-                        for (int j = 0; j < listSectionSize; j++) {
-                            listSection.add(readData(dis));
-                        }
+                        List<String> listSection = new ArrayList<>();
+                        readWithException(dis, () -> listSection.add(dis.readUTF()));
                         resume.addSection(section, new ListSection(listSection));
                     }
                     case EXPERIENCE, EDUCATION -> {
                         List<Organization> org = new ArrayList<>();
-                        int positionOrgSize = dis.readInt();
-                        for (int k = 0; k < positionOrgSize; k++) {
+                        readWithException(dis, () -> {
                             Link link = new Link(readIfNull(dis), readIfNull(dis));
                             List<Organization.Position> pos = new ArrayList<>();
-                            int positionListSize = dis.readInt();
-                            for (int m = 0; m < positionListSize; m++) {
-                                LocalDate startDate = ReadDates(dis);
-                                LocalDate endDate = ReadDates(dis);
-                                String title = readData(dis);
-                                String description = readData(dis);
+                            readWithException(dis, () -> {
+                                LocalDate startDate = readDate(dis);
+                                LocalDate endDate = readDate(dis);
+                                String title = readStr(dis);
+                                String description = readStr(dis);
                                 pos.add(new Organization.Position(startDate, endDate, title, description));
-                            }
+                            });
                             org.add(new Organization(link, pos));
-                        }
+                        });
                         resume.addSection(section, new OrganizationSection(org));
                     }
                 }
-            }
+            });
             return resume;
         }
     }
 
+
     @FunctionalInterface
-    interface Write<T> {
+    interface Record<T> {
         void write(T t) throws IOException;
     }
 
-    private <T> void writeWithException(Collection<T> collection, DataOutputStream dos, Write<T> obj) throws IOException {
+    private <T> void writeWithException(Collection<T> collection, DataOutputStream dos, Record<T> obj) throws IOException {
         dos.writeInt(collection.size());
         for (T col : collection) {
             obj.write(col);
@@ -115,30 +108,40 @@ public class DataStreamSerializer implements StreamSerializer {
     }
 
     private void writeIfNull(String str, DataOutputStream dos) throws IOException {
-        if (str == null) {
-            dos.writeUTF("");
-        } else {
-            dos.writeUTF(str);
-        }
+        dos.writeUTF(Objects.requireNonNullElse(str, ""));
     }
 
-    private String writeDates(LocalDate date) {
-        return String.valueOf(date);
+    private LocalDate writeDate(LocalDate date) {
+        return date;
     }
 
     private String readIfNull(DataInputStream dis) throws IOException {
         String str = dis.readUTF();
-        if (str.equals("")) {
-            return null;
-        }
-        return str;
+        return str.equals("") ? null : str;
     }
 
-    private LocalDate ReadDates(DataInputStream dis) throws IOException {
+    private LocalDate readDate(DataInputStream dis) throws IOException {
         return LocalDate.parse(dis.readUTF());
     }
 
-    private String readData(DataInputStream dis) throws IOException {
+    private String readStr(DataInputStream dis) throws IOException {
         return dis.readUTF();
+    }
+
+    @FunctionalInterface
+    interface Readout {
+        void read() throws IOException;
+
+    }
+
+    private void readWithException(DataInputStream dis, Readout obj) throws IOException {
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            obj.read();
+        }
+    }
+
+    private void writeStr(String str, DataOutputStream dos) throws IOException {
+        dos.writeUTF(str);
     }
 }
