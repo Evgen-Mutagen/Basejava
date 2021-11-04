@@ -94,7 +94,6 @@ public class DataStreamSerializer implements StreamSerializer {
         }
     }
 
-
     @FunctionalInterface
     interface Record<T> {
         void write(T t) throws IOException;
@@ -115,17 +114,8 @@ public class DataStreamSerializer implements StreamSerializer {
         return date;
     }
 
-    private String readIfNull(DataInputStream dis) throws IOException {
-        String str = dis.readUTF();
-        return str.equals("") ? null : str;
-    }
-
-    private LocalDate readDate(DataInputStream dis) throws IOException {
-        return LocalDate.parse(dis.readUTF());
-    }
-
-    private String readStr(DataInputStream dis) throws IOException {
-        return dis.readUTF();
+    private void writeStr(String str, DataOutputStream dos) throws IOException {
+        dos.writeUTF(str);
     }
 
     @FunctionalInterface
@@ -141,7 +131,16 @@ public class DataStreamSerializer implements StreamSerializer {
         }
     }
 
-    private void writeStr(String str, DataOutputStream dos) throws IOException {
-        dos.writeUTF(str);
+    private String readIfNull(DataInputStream dis) throws IOException {
+        String str = dis.readUTF();
+        return str.equals("") ? null : str;
+    }
+
+    private LocalDate readDate(DataInputStream dis) throws IOException {
+        return LocalDate.parse(dis.readUTF());
+    }
+
+    private String readStr(DataInputStream dis) throws IOException {
+        return dis.readUTF();
     }
 }
