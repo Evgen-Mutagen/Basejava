@@ -42,8 +42,8 @@ public class DataStreamSerializer implements StreamSerializer {
                             writeStr(homePage.getName(), dos);
                             writeIfNull(homePage.getUrl(), dos);
                             writeWithException(org.getPositions(), dos, pos -> {
-                                writeStr(String.valueOf(writeDate(pos.getStartDate())), dos);
-                                writeStr(String.valueOf(writeDate(pos.getEndDate())), dos);
+                                writeDate(pos.getStartDate(), dos);
+                                writeDate(pos.getEndDate(), dos);
                                 writeStr(pos.getTitle(), dos);
                                 writeIfNull(pos.getDescription(), dos);
                             });
@@ -110,8 +110,10 @@ public class DataStreamSerializer implements StreamSerializer {
         dos.writeUTF(Objects.requireNonNullElse(str, ""));
     }
 
-    private LocalDate writeDate(LocalDate date) {
-        return date;
+    private void writeDate(LocalDate date, DataOutputStream dos) throws IOException {
+         dos.writeInt(date.getYear());
+         dos.writeInt(date.getMonth().getValue());
+         dos.writeInt(date.getDayOfMonth());
     }
 
     private void writeStr(String str, DataOutputStream dos) throws IOException {
@@ -137,7 +139,7 @@ public class DataStreamSerializer implements StreamSerializer {
     }
 
     private LocalDate readDate(DataInputStream dis) throws IOException {
-        return LocalDate.parse(dis.readUTF());
+        return LocalDate.of(dis.readInt() ,dis.readInt(), dis.readInt());
     }
 
     private String readStr(DataInputStream dis) throws IOException {
