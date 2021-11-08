@@ -40,12 +40,12 @@ public class DataStreamSerializer implements StreamSerializer {
                         writeWithException(organizationSection.getOrganizations(), dos, org -> {
                             Link homePage = org.getHomePage();
                             writeStr(homePage.getName(), dos);
-                            writeIfNull(homePage.getUrl(), dos);
+                            writeNullSafely(homePage.getUrl(), dos);
                             writeWithException(org.getPositions(), dos, pos -> {
                                 writeDate(pos.getStartDate(), dos);
                                 writeDate(pos.getEndDate(), dos);
                                 writeStr(pos.getTitle(), dos);
-                                writeIfNull(pos.getDescription(), dos);
+                                writeNullSafely(pos.getDescription(), dos);
                             });
                         });
                     }
@@ -75,13 +75,13 @@ public class DataStreamSerializer implements StreamSerializer {
                     case EXPERIENCE, EDUCATION -> {
                         List<Organization> org = new ArrayList<>();
                         readWithException(dis, () -> {
-                            Link link = new Link(readStr(dis), readIfNull(dis));
+                            Link link = new Link(readStr(dis), readNullSafely(dis));
                             List<Organization.Position> pos = new ArrayList<>();
                             readWithException(dis, () -> {
                                 LocalDate startDate = readDate(dis);
                                 LocalDate endDate = readDate(dis);
                                 String title = readStr(dis);
-                                String description = readIfNull(dis);
+                                String description = readNullSafely(dis);
                                 pos.add(new Organization.Position(startDate, endDate, title, description));
                             });
                             org.add(new Organization(link, pos));
@@ -106,7 +106,7 @@ public class DataStreamSerializer implements StreamSerializer {
         }
     }
 
-    private void writeIfNull(String str, DataOutputStream dos) throws IOException {
+    private void writeNullSafely(String str, DataOutputStream dos) throws IOException {
         dos.writeUTF(Objects.requireNonNullElse(str, ""));
     }
 
@@ -133,7 +133,7 @@ public class DataStreamSerializer implements StreamSerializer {
         }
     }
 
-    private String readIfNull(DataInputStream dis) throws IOException {
+    private String readNullSafely(DataInputStream dis) throws IOException {
         String str = dis.readUTF();
         return str.equals("") ? null : str;
     }

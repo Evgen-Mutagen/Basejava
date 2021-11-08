@@ -1,5 +1,6 @@
 package com.urise.webapp;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,10 +8,12 @@ public class MainConcurrency {
     public static final int THREADS_NUMBER = 10000;
     private int counter;
     private static final Object LOCK = new Object();
+    private static final Object LOCK1 = new Object();
+    private static final Object LOCK2 = new Object();
+
 
     public static void main(String[] args) throws InterruptedException {
-        MainDeadlock deadLockThread = new MainDeadlock();
-
+        MainDeadlock deadlock = new MainDeadlock();
         System.out.println(Thread.currentThread().getName());
 
         Thread thread0 = new Thread() {
@@ -61,9 +64,10 @@ public class MainConcurrency {
         });
         System.out.println(mainConcurrency.counter);
 
-        deadLockThread.thread1.start();
-        deadLockThread.thread2.start();
+        deadlock.deadlock(LOCK1, LOCK2);
+        deadlock.deadlock(LOCK2, LOCK1);
     }
+
 
     private synchronized void inc() {
 //        synchronized (this) {
@@ -75,3 +79,4 @@ public class MainConcurrency {
 //        }
     }
 }
+
