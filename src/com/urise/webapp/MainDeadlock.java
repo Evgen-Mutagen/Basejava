@@ -14,7 +14,7 @@ public class MainDeadlock {
             synchronized (lock1) {
                 System.out.println("Thread 1 : locked " + lock1);
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(0);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
