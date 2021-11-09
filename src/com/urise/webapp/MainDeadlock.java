@@ -8,19 +8,21 @@ public class MainDeadlock {
         deadlock(lock2, lock1);
     }
 
-        public static void deadlock (Object lock1, Object lock2) {
-           new Thread(() -> {
-               synchronized (lock1) {
-                   System.out.println("Thread : locked LOCK1");
-                   try {
-                       Thread.sleep(100);
-                   } catch (InterruptedException e) {
-                       e.printStackTrace();
-                   }
-                   synchronized (lock2) {
-                       System.out.println("Thread : locked LOCK2");
-                   }
-               }
-           }).start();
+    public static void deadlock(Object lock1, Object lock2) {
+        new Thread(() -> {
+            System.out.println("Wait: lock1");
+            synchronized (lock1) {
+                System.out.println("Thread : locked lock1");
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("Wait: lock2");
+                synchronized (lock2) {
+                    System.out.println("Thread : locked lock2");
+                }
+            }
+        }).start();
     }
 }
