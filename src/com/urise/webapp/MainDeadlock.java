@@ -10,7 +10,7 @@ public class MainDeadlock {
 
     public static void deadlock(String lock1, String lock2) {
         new Thread(() -> {
-            System.out.println(Thread.currentThread().getName() + " are waiting for " + lock1);
+            System.out.println(Thread.currentThread().getName() + " is waiting for " + lock1);
             synchronized (lock1) {
                 System.out.println(Thread.currentThread().getName() + ": " + lock1);
                 try {
@@ -18,7 +18,7 @@ public class MainDeadlock {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                System.out.println(Thread.currentThread().getName() + " are waiting for " + lock2);
+                System.out.println(Thread.currentThread().getName() + " is waiting for " + lock2);
                 synchronized (lock2) {
                     System.out.println(Thread.currentThread().getName() + ": " + lock2);
                 }
