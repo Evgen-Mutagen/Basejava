@@ -64,8 +64,6 @@ public class MainConcurrency {
         });
         System.out.println(mainConcurrency.counter);
 
-        deadlock.deadlock(LOCK1, LOCK2);
-        deadlock.deadlock(LOCK2, LOCK1);
     }
 
 
