@@ -8,7 +8,6 @@ public class MainDeadlock {
         deadlock(lock2, lock1);
     }
 
-
         public static void deadlock (Object lock1, Object lock2) {
            new Thread(() -> {
                synchronized (lock1) {
