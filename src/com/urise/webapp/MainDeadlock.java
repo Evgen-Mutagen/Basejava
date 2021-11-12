@@ -10,17 +10,18 @@ public class MainDeadlock {
 
     public static void deadlock(String lock1, String lock2) {
         new Thread(() -> {
-            System.out.println(Thread.currentThread().getName() + " is waiting for " + lock1);
+            String threadName = Thread.currentThread().getName();
+            System.out.println(threadName + " is waiting for " + lock1);
             synchronized (lock1) {
-                System.out.println(Thread.currentThread().getName() + ": " + lock1);
+                System.out.println(threadName + ": locked " + lock1);
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                System.out.println(Thread.currentThread().getName() + " is waiting for " + lock2);
+                System.out.println(threadName + " is waiting for " + lock2);
                 synchronized (lock2) {
-                    System.out.println(Thread.currentThread().getName() + ": " + lock2);
+                    System.out.println(threadName + ": locked " + lock2);
                 }
             }
         }).start();

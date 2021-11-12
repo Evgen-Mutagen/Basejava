@@ -12,13 +12,20 @@ public class MainStream {
     }
 
     public static int minValue(int[] values) {
-        return Arrays.stream(values).sorted().distinct().reduce(0, (a, b) -> (int) Math.pow(10, (int) (Math.log10(b) + 1)) * a + b);
-
+        return Arrays.stream(values).
+                distinct().
+                sorted().
+                reduce(0, (a, b) -> 10 * a + b);
     }
 
     public static List<Integer> oddOrEven(List<Integer> integers) {
-        return integers.stream()
-                .filter(integers.stream().mapToInt(Integer::intValue).sum() % 2 != 0 ? a -> a % 2 == 0 : a -> a % 2 != 0)
+        int modSum = integers.stream().
+                mapToInt(Integer::intValue).
+                sum() % 2;
+
+        return integers
+                .stream()
+                .filter(a -> a % 2 != modSum)
                 .collect(Collectors.toList());
     }
 }
