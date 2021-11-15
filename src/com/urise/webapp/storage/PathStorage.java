@@ -97,7 +97,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             return Files.list(directory);
         } catch (IOException e) {
-            throw new StorageException("Path error", null);
+            throw new StorageException("Path error", (Exception) null);
         }
     }
 }
