@@ -8,12 +8,16 @@ public class ResumeTestData {
     public static final Resume RESUME_2;
     public static final Resume RESUME_3;
     public static final Resume RESUME_4;
+    public static final String UUID1 = "uuid1";
+    public static final String UUID2 = "uuid2";
+    public static final String UUID3 = "uuid3";
+    public static final String UUID4 = "uuid4";
 
     static {
-        RESUME_1 = new Resume("uuid1", "Grigory Kislin");
-        RESUME_2 = new Resume("uuid2", "name2");
-        RESUME_3 = new Resume("uuid3", "name3");
-        RESUME_4 = new Resume("uuid4", "name4");
+        RESUME_1 = new Resume(UUID1, "name1");
+        RESUME_2 = new Resume(UUID2, "name2");
+        RESUME_3 = new Resume(UUID3, "name3");
+        RESUME_4 = new Resume(UUID4, "name4");
     }
 
     public static void main(String[] args) {

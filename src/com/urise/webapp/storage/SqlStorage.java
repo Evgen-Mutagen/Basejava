@@ -60,10 +60,11 @@ public class SqlStorage implements Storage {
     public void save(Resume r) {
         try (Connection conn = connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement("INSERT INTO resume (uuid, full_name) VALUES (?,?)")) {
-            ps.setString(1, r.getUuid());
-            ps.setString(2, r.getFullName());
-            ps.execute();
-        } catch (SQLException e) {
+                ps.setString(1, r.getUuid());
+                ps.setString(2, r.getFullName());
+                ps.executeUpdate();
+        }
+         catch (SQLException e) {
             throw new StorageException(e);
         }
     }
@@ -85,7 +86,7 @@ public class SqlStorage implements Storage {
     @Override
     public List<Resume> getAllSorted() {
         try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement("SELECT * FROM resume r ORDER BY full_name, uuid")) {
+             PreparedStatement ps = conn.prepareStatement("SELECT trim(uuid) uuid, trim(full_name) full_name FROM resume r ORDER BY uuid")) {
             ResultSet rs = ps.executeQuery();
             List<Resume> list = new ArrayList<>();
             while (rs.next()) {
