@@ -1,5 +1,6 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
@@ -62,10 +63,10 @@ public class SqlStorage implements Storage {
              PreparedStatement ps = conn.prepareStatement("INSERT INTO resume (uuid, full_name) VALUES (?,?)")) {
                 ps.setString(1, r.getUuid());
                 ps.setString(2, r.getFullName());
-                ps.executeUpdate();
+                ps.execute();
         }
          catch (SQLException e) {
-            throw new StorageException(e);
+            throw new ExistStorageException("uuid уже есть");
         }
     }
 
