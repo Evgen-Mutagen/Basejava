@@ -13,9 +13,9 @@ public class SqlHelper {
         this.connectionFactory = connectionFactory;
     }
 
-   @FunctionalInterface
+    @FunctionalInterface
     public interface ABlockOfCode<T> {
-       T executeSpecific(PreparedStatement ps) throws SQLException;
+        T executeSpecific(PreparedStatement ps) throws SQLException;
     }
 
     public <T> T transactionExecute(String sql, ABlockOfCode<T> aBlockOfCode) {
@@ -25,6 +25,5 @@ public class SqlHelper {
         } catch (SQLException e) {
             throw new StorageException(e);
         }
-
     }
 }
