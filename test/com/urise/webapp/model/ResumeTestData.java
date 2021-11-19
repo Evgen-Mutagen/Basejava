@@ -2,16 +2,17 @@ package com.urise.webapp.model;
 
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class ResumeTestData {
     public static final Resume RESUME_1;
     public static final Resume RESUME_2;
     public static final Resume RESUME_3;
     public static final Resume RESUME_4;
-    public static final String UUID1 = "uuid1";
-    public static final String UUID2 = "uuid2";
-    public static final String UUID3 = "uuid3";
-    public static final String UUID4 = "uuid4";
+    public static final String UUID1 = UUID.randomUUID().toString();
+    public static final String UUID2 = UUID.randomUUID().toString();
+    public static final String UUID3 = UUID.randomUUID().toString();
+    public static final String UUID4 = UUID.randomUUID().toString();
 
     static {
         RESUME_1 = new Resume(UUID1, "name1");

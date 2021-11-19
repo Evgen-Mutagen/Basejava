@@ -1,7 +1,6 @@
 package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.NotExistStorageException;
-import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.sql.SqlHelper;
 
@@ -19,7 +18,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public void clear() {
-        sqlHelper.transactionExecute("DELETE FROM resume", ps -> {
+        sqlHelper.executeSql("DELETE FROM resume", ps -> {
             ps.execute();
             return null;
         });
@@ -27,7 +26,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public Resume get(String uuid) {
-        return sqlHelper.transactionExecute("SELECT * FROM resume r WHERE r.uuid =?", ps -> {
+        return sqlHelper.executeSql("SELECT * FROM resume r WHERE r.uuid =?", ps -> {
             ps.setString(1, uuid);
             ResultSet rs = ps.executeQuery();
             if (!rs.next()) {
@@ -39,11 +38,11 @@ public class SqlStorage implements Storage {
 
     @Override
     public void update(Resume r) {
-        sqlHelper.transactionExecute("UPDATE resume SET full_name =? WHERE uuid =?", ps -> {
+        sqlHelper.executeSql("UPDATE resume SET full_name =? WHERE uuid =?", ps -> {
+            String uuid = r.getUuid();
             ps.setString(1, r.getFullName());
-            ps.setString(2, r.getUuid());
-            int row = ps.executeUpdate();
-            if (row == 0) {
+            ps.setString(2, uuid);
+            if (ps.executeUpdate() == 0) {
                 throw new NotExistStorageException(r.getUuid());
             }
             return null;
@@ -52,7 +51,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public void save(Resume r) {
-        sqlHelper.transactionExecute("INSERT INTO resume (uuid, full_name) VALUES (?,?)", ps -> {
+        sqlHelper.executeSql("INSERT INTO resume (uuid, full_name) VALUES (?,?)", ps -> {
             ps.setString(1, r.getUuid());
             ps.setString(2, r.getFullName());
             ps.execute();
@@ -62,10 +61,9 @@ public class SqlStorage implements Storage {
 
     @Override
     public void delete(String uuid) {
-        sqlHelper.transactionExecute("DELETE  FROM resume r WHERE r.uuid =?", ps -> {
+        sqlHelper.executeSql("DELETE FROM resume r WHERE r.uuid =?", ps -> {
             ps.setString(1, uuid);
-            int row = ps.executeUpdate();
-            if (row == 0) {
+            if (ps.executeUpdate() == 0) {
                 throw new NotExistStorageException(uuid);
             }
             return null;
@@ -74,7 +72,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return sqlHelper.transactionExecute("SELECT trim(uuid) uuid, trim(full_name) full_name FROM resume r ORDER BY uuid", ps -> {
+        return sqlHelper.executeSql("SELECT uuid, full_name FROM resume r ORDER BY uuid, full_name", ps -> {
             ResultSet rs = ps.executeQuery();
             List<Resume> list = new ArrayList<>();
             while (rs.next()) {
@@ -86,11 +84,9 @@ public class SqlStorage implements Storage {
 
     @Override
     public int size() {
-        return sqlHelper.transactionExecute("SELECT count(*) cnt FROM resume ", ps -> {
+        return sqlHelper.executeSql("SELECT count(*) FROM resume ", ps -> {
             ResultSet rs = ps.executeQuery();
-            if (!rs.next()) {
-                throw new StorageException("ERROR");
-            }
+            rs.next();
             return rs.getInt(1);
         });
     }
