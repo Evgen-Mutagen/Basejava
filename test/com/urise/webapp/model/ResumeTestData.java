@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class ResumeTestData {
-    public static final Resume RESUME_1;
+    public static Resume RESUME_1;
     public static final Resume RESUME_2;
     public static final Resume RESUME_3;
     public static final Resume RESUME_4;
@@ -22,14 +22,10 @@ public class ResumeTestData {
     }
 
     public static void main(String[] args) {
-        getResume("uuid1", "Grigory Kislin");
-        System.out.println(RESUME_1.getContacts());
-        System.out.println(RESUME_1.getContacts().get(ContactType.MOBILE_PHONE));
-        System.out.println(RESUME_1.getSections());
-        System.out.println(RESUME_1.getSections().get(SectionType.EDUCATION));
+        getResume1("uuid1", "Grigory Kislin");
     }
 
-    public static Resume getResume(String uuid, String fullName) {
+    public static Resume getResume1(String uuid, String fullName) {
         RESUME_1.addContact(ContactType.MOBILE_PHONE, " +7(921) 855-0482");
         RESUME_1.addContact(ContactType.MAIL, " gkislin@yandex.ru");
         RESUME_1.addContact(ContactType.SKYPE, "grigory.kislin");
@@ -69,7 +65,22 @@ public class ResumeTestData {
                         1993, Month.JULY, "Инженер (программист Fortran, C)", " "),
                 new Organization.Position(1993, Month.SEPTEMBER, 1996, Month.JULY,
                         "Аспирантура (программист С, С++)", " "))));
-
         return RESUME_1;
+    }
+
+    public static Resume getResume2(String uuid, String fullName) {
+        RESUME_2.addContact(ContactType.MOBILE_PHONE, " +7900000000");
+        RESUME_2.addContact(ContactType.MAIL, " pikachu@yandex.ru");
+        TextSection objective2 = new TextSection("Главный разработчик разработок");
+        RESUME_2.addSection(SectionType.OBJECTIVE, objective2);
+        return RESUME_2;
+    }
+
+    public static Resume getResume3(String uuid, String fullName) {
+        RESUME_3.addContact(ContactType.MOBILE_PHONE, " +76666666666");
+        RESUME_3.addContact(ContactType.SKYPE, "Alexander Nevsky");
+        TextSection objective3 = new TextSection("Мистер вселенная");
+        RESUME_3.addSection(SectionType.OBJECTIVE, objective3);
+        return RESUME_3;
     }
 }

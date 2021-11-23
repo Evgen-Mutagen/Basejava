@@ -1,8 +1,9 @@
 package com.urise.webapp.storage;
 
 import com.urise.webapp.Config;
-import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.exception.ExistStorageException;
+import com.urise.webapp.exception.NotExistStorageException;
+import com.urise.webapp.model.ContactType;
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.model.ResumeTestData;
 import org.junit.Assert;
@@ -13,7 +14,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractStorageTest {
     protected static final File STORAGE_DIR = Config.get().getStorageDir();
@@ -26,9 +27,9 @@ public abstract class AbstractStorageTest {
     @Before
     public void setUp() throws Exception {
         storage.clear();
-        storage.save(ResumeTestData.RESUME_1);
-        storage.save(ResumeTestData.RESUME_2);
-        storage.save(ResumeTestData.RESUME_3);
+        storage.save(ResumeTestData.getResume1(ResumeTestData.UUID1, "Grigory Kislin"));
+        storage.save(ResumeTestData.getResume2(ResumeTestData.UUID1, "Pikachu"));
+        storage.save(ResumeTestData.getResume3(ResumeTestData.UUID1, "Alexander Nevsky"));
     }
 
     @Test
@@ -39,7 +40,9 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() throws Exception {
-        Resume updateResume = new Resume(ResumeTestData.UUID3, "pikachu");
+        Resume updateResume = new Resume(ResumeTestData.UUID3, "Keanu Reeves");
+        updateResume.addContact(ContactType.MOBILE_PHONE, "+73434236");
+        updateResume.addContact(ContactType.SKYPE, "Keanu@hollywood.com");
         storage.update(updateResume);
         assertEquals(updateResume, storage.get(ResumeTestData.UUID3));
     }
@@ -88,7 +91,7 @@ public abstract class AbstractStorageTest {
     public void getAllSorted() throws Exception {
         List<Resume> allResumes = storage.getAllSorted();
         assertEquals(3, allResumes.size());
-        assertEquals(allResumes, Arrays.asList(ResumeTestData.RESUME_1, ResumeTestData.RESUME_2, ResumeTestData.RESUME_3));
+        assertEquals(Arrays.asList(ResumeTestData.RESUME_1, ResumeTestData.RESUME_2, ResumeTestData.RESUME_3),allResumes);
         //  Assert.assertArrayEquals(allResumes, storage.getAll());
     }
 
