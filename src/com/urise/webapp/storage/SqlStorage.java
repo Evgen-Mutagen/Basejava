@@ -103,7 +103,7 @@ public class SqlStorage implements Storage {
                             Resume r = new Resume(uuid, rs.getString("full_name"));
                             map.put(r.getUuid(), r);
                         }
-                        Resume r = map.get(rs.getString("uuid"));
+                        Resume r = map.get(uuid);
                         saveContact(rs, r);
                     }
                     return new ArrayList<>(map.values());
@@ -122,8 +122,7 @@ public class SqlStorage implements Storage {
     private void saveContact(ResultSet rs, Resume r) throws SQLException {
         String value = rs.getString("value");
         if (value != null) {
-            ContactType type = ContactType.valueOf(rs.getString("type"));
-            r.addContact(type, value);
+            r.addContact(ContactType.valueOf(rs.getString("type")), value);
         }
     }
 
