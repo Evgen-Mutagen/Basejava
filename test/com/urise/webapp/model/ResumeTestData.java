@@ -1,7 +1,5 @@
 package com.urise.webapp.model;
 
-import java.time.Month;
-import java.util.ArrayList;
 import java.util.UUID;
 
 public class ResumeTestData {
@@ -31,7 +29,7 @@ public class ResumeTestData {
         RESUME_1.addContact(ContactType.SKYPE, "grigory.kislin");
         RESUME_1.addContact(ContactType.GITHUB, "github.com/gkislin");
         RESUME_1.addContact(ContactType.STACKOVERFLOW, "stackoverflow.com/users/548473/grigory-kislin");
-        TextSection personal = new TextSection("Аналитический склад ума, сильная логика, креативность," +
+     /*  TextSection personal = new TextSection("Аналитический склад ума, сильная логика, креативность," +
                 " инициативность. Пурист кода и архитектуры.");
         RESUME_1.addSection(SectionType.PERSONAL, personal);
 
@@ -64,15 +62,15 @@ public class ResumeTestData {
                 new Organization.Position(1987, Month.SEPTEMBER,
                         1993, Month.JULY, "Инженер (программист Fortran, C)", " "),
                 new Organization.Position(1993, Month.SEPTEMBER, 1996, Month.JULY,
-                        "Аспирантура (программист С, С++)", " "))));
+                        "Аспирантура (программист С, С++)", " ")))); */
         return RESUME_1;
     }
 
     public static Resume getResume2(String uuid, String fullName) {
         RESUME_2.addContact(ContactType.MOBILE_PHONE, " +7900000000");
         RESUME_2.addContact(ContactType.MAIL, " pikachu@yandex.ru");
-        TextSection objective2 = new TextSection("Главный разработчик разработок");
-        RESUME_2.addSection(SectionType.OBJECTIVE, objective2);
+      /*  TextSection objective2 = new TextSection("Главный разработчик разработок");
+        RESUME_2.addSection(SectionType.OBJECTIVE, objective2);*/
         return RESUME_2;
     }
 
@@ -80,7 +78,7 @@ public class ResumeTestData {
         RESUME_3.addContact(ContactType.MOBILE_PHONE, " +76666666666");
         RESUME_3.addContact(ContactType.SKYPE, "Alexander Nevsky");
         TextSection objective3 = new TextSection("Мистер вселенная");
-        RESUME_3.addSection(SectionType.OBJECTIVE, objective3);
+       // RESUME_3.addSection(SectionType.OBJECTIVE, objective3);
         return RESUME_3;
     }
 }
