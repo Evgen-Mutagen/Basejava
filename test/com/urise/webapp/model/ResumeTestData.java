@@ -1,5 +1,6 @@
 package com.urise.webapp.model;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class ResumeTestData {
@@ -21,6 +22,8 @@ public class ResumeTestData {
 
     public static void main(String[] args) {
         getResume1("uuid1", "Grigory Kislin");
+        getResume2("uuid1", "Grigory Kislin");
+        System.out.println(RESUME_2.getSections());
     }
 
     public static Resume getResume1(String uuid, String fullName) {
@@ -29,7 +32,7 @@ public class ResumeTestData {
         RESUME_1.addContact(ContactType.SKYPE, "grigory.kislin");
         RESUME_1.addContact(ContactType.GITHUB, "github.com/gkislin");
         RESUME_1.addContact(ContactType.STACKOVERFLOW, "stackoverflow.com/users/548473/grigory-kislin");
-     /*  TextSection personal = new TextSection("Аналитический склад ума, сильная логика, креативность," +
+        TextSection personal = new TextSection("Аналитический склад ума, сильная логика, креативность," +
                 " инициативность. Пурист кода и архитектуры.");
         RESUME_1.addSection(SectionType.PERSONAL, personal);
 
@@ -48,7 +51,7 @@ public class ResumeTestData {
                 "ведение проектов. Более 1000 выпускников.");
         RESUME_1.addSection(SectionType.ACHIEVEMENT, achievement);
 
-        RESUME_1.addSection(SectionType.EXPERIENCE, new OrganizationSection(new Organization(
+       /* RESUME_1.addSection(SectionType.EXPERIENCE, new OrganizationSection(new Organization(
                 "Wrike", "https://www.wrike.com",
                 new Organization.Position(2014, Month.OCTOBER, 2016, Month.JANUARY,
                         "Старший разработчик (backend)", "Проектирование и разработка онлайн платформы" +
@@ -69,16 +72,26 @@ public class ResumeTestData {
     public static Resume getResume2(String uuid, String fullName) {
         RESUME_2.addContact(ContactType.MOBILE_PHONE, " +7900000000");
         RESUME_2.addContact(ContactType.MAIL, " pikachu@yandex.ru");
-      /*  TextSection objective2 = new TextSection("Главный разработчик разработок");
-        RESUME_2.addSection(SectionType.OBJECTIVE, objective2);*/
+
+        TextSection objective2 = new TextSection("Главный разработчик разработок");
+        RESUME_2.addSection(SectionType.OBJECTIVE, objective2);
+
+        ListSection qualification2 = new ListSection(new ArrayList<>());
+        qualification2.save("много знаний");
+        RESUME_2.addSection(SectionType.QUALIFICATIONS, qualification2);
         return RESUME_2;
     }
 
     public static Resume getResume3(String uuid, String fullName) {
         RESUME_3.addContact(ContactType.MOBILE_PHONE, " +76666666666");
         RESUME_3.addContact(ContactType.SKYPE, "Alexander Nevsky");
+
         TextSection objective3 = new TextSection("Мистер вселенная");
-       // RESUME_3.addSection(SectionType.OBJECTIVE, objective3);
-        return RESUME_3;
+        RESUME_3.addSection(SectionType.OBJECTIVE, objective3);
+
+        ListSection achievement3 = new ListSection(new ArrayList<>());
+        achievement3.save("актёр, режиссёр, спортсмен");
+        RESUME_3.addSection(SectionType.ACHIEVEMENT, achievement3);
+        return  RESUME_3;
     }
 }
