@@ -1,6 +1,7 @@
 package com.urise.webapp.web;
 
 import com.urise.webapp.Config;
+import com.urise.webapp.model.Resume;
 import com.urise.webapp.storage.Storage;
 
 import javax.servlet.ServletConfig;
@@ -32,12 +33,18 @@ public class ResumeServlet extends HttpServlet {
         //     response.getWriter().write(name == null ? "Hello Resumes!" : "Hello " + name + '!');
 
         String text = "" +
-                "<table border=\"1\" width=\"200\" height=\"100\" bgcolor=\"\t#AFEEEE\">\n" +
-                "<tr>\n" +
-                "<th>uuid</th>\n" +
-                "<th>full_name</th>\n" +
-                "</tr>\n";
-        response.getWriter().write(text + "</table>\n");
+                "<table border=\"2\" width=\"200\" height=\"100\" bgcolor=\"\t#AFEEEE\">" +
+                "<tr>" +
+                "<th>uuid</th>" +
+                "<th>full_name</th>" +
+                "</tr>";
 
+        for (Resume r : storage.getAllSorted()) {
+            text += "<tr>" +
+                    "<td align=center>" + r.getUuid() + "</td>" +
+                    "<td align=center>" + r.getFullName() + "</td>" +
+                    "</tr>";
+        }
+        response.getWriter().write(text + "</table>");
     }
 }
