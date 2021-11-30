@@ -33,7 +33,7 @@ public class ResumeServlet extends HttpServlet {
         //     response.getWriter().write(name == null ? "Hello Resumes!" : "Hello " + name + '!');
 
         String text = "" +
-                "<table border=\"2\" width=\"200\" height=\"100\" bgcolor=\"\t#AFEEEE\">" +
+                "<table border=\"2\" width=\"300\" height=\"200\" bgcolor=\"\t#AFEEEE\">" +
                 "<tr>" +
                 "<th>uuid</th>" +
                 "<th>full_name</th>" +
