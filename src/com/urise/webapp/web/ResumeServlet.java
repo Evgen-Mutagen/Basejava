@@ -40,7 +40,7 @@ public class ResumeServlet extends HttpServlet {
                 "</tr>";
 
         for (Resume r : storage.getAllSorted()) {
-            text = text + ("<tr>" +
+            text += ("<tr>" +
                     "<td align=center>" + r.getUuid() + "</td>" +
                     "<td align=center>" + r.getFullName() + "</td>" +
                     "</tr>");
