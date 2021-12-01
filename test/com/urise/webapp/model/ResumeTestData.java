@@ -78,6 +78,8 @@ public class ResumeTestData {
 
         ListSection qualification2 = new ListSection(new ArrayList<>());
         qualification2.save("много знаний");
+        qualification2.save("много знаний2");
+        qualification2.save("много знаний3");
         RESUME_2.addSection(SectionType.QUALIFICATIONS, qualification2);
         return RESUME_2;
     }
