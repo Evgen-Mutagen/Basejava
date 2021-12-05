@@ -87,6 +87,7 @@ public class ResumeTestData {
     public static Resume getResume3(String uuid, String fullName) {
         RESUME_3.addContact(ContactType.MOBILE_PHONE, " +76666666666");
         RESUME_3.addContact(ContactType.SKYPE, "Alexander Nevsky");
+        RESUME_3.addContact(ContactType.MAIL, " Mr.Universe@yahoo.com");
 
         TextSection objective3 = new TextSection("Мистер вселенная");
         RESUME_3.addSection(SectionType.OBJECTIVE, objective3);
