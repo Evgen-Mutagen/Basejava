@@ -47,7 +47,7 @@
         </c:forEach>
         <hr>
         <button type="submit">Сохранить</button>
-        <button onclick="window.history.go(-1)">Отменить</button>
+        <button type="reset" onclick="window.history.go(-1)">Отменить</button>
     </form>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
