@@ -14,6 +14,7 @@
         <tr>
             <th>Имя</th>
             <th>Email</th>
+            <th>Mobile phone</th>
             <th></th>
             <th></th>
         </tr>
@@ -22,6 +23,7 @@
             <tr>
                 <td><a href="resume?uuid=${resume.uuid}&action=view">${resume.fullName}</a></td>
                 <td><%=ContactType.MAIL.toHtml(resume.getContact(ContactType.MAIL))%></td>
+                <td><%=ContactType.MOBILE_PHONE.toHtml(resume.getContact(ContactType.MOBILE_PHONE))%></td>
                 <td><a href="resume?uuid=${resume.uuid}&action=delete"><img src="img/delete.png"></a></td>
                 <td><a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/pencil.png"></a></td>
             </tr>

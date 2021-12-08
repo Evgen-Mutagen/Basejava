@@ -40,10 +40,21 @@ public enum ContactType {
     };
 
     private final String title;
+    private  String ref;
 
     ContactType(String title) {
         this.title = title;
     }
+
+    ContactType(String title, String ref) {
+        this.title = title;
+        this.ref = ref;
+    }
+
+    public String getRef() {
+        return ref;
+    }
+
 
     public String getTitle() {
         return title;
