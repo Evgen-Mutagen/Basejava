@@ -46,8 +46,8 @@
             </dl>
         </c:forEach>
         <hr>
-        <button class="key" type="submit">Сохранить</button>
-        <button class="key" onclick="window.history.go(-1)">Отменить</button>
+        <button type="submit">Сохранить</button>
+        <button onclick="window.history.go(-1)">Отменить</button>
     </form>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
