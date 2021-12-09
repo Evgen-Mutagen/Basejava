@@ -13,11 +13,13 @@ public class HtmlUtil {
                 : String.format("<a href=\"%s%s\">%2$s</a>", ct.getRef(), value);
     }
 
-    public static List<String> sectionToHtmlList(AbstractSection section) {
+    public static <T> List<T> sectionToHtmlList(AbstractSection section) {
         if (section instanceof TextSection) {
-            return Arrays.asList(((TextSection) section).getTitle());
+            return (List<T>) Arrays.asList(((TextSection) section).getTitle());
         } else if (section instanceof ListSection) {
-            return ((ListSection) section).getList();
+            return (List<T>) ((ListSection) section).getList();
+        }  else if (section instanceof OrganizationSection) {
+        return (List<T>) ((OrganizationSection) section).getOrganizations();
         }
         return new ArrayList<>();
     }

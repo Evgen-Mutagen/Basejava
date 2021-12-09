@@ -1,5 +1,6 @@
 package com.urise.webapp.model;
 
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -51,7 +52,7 @@ public class ResumeTestData {
                 "ведение проектов. Более 1000 выпускников.");
         RESUME_1.addSection(SectionType.ACHIEVEMENT, achievement);
 
-       /* RESUME_1.addSection(SectionType.EXPERIENCE, new OrganizationSection(new Organization(
+        RESUME_1.addSection(SectionType.EXPERIENCE, new OrganizationSection(new Organization(
                 "Wrike", "https://www.wrike.com",
                 new Organization.Position(2014, Month.OCTOBER, 2016, Month.JANUARY,
                         "Старший разработчик (backend)", "Проектирование и разработка онлайн платформы" +
@@ -65,7 +66,7 @@ public class ResumeTestData {
                 new Organization.Position(1987, Month.SEPTEMBER,
                         1993, Month.JULY, "Инженер (программист Fortran, C)", " "),
                 new Organization.Position(1993, Month.SEPTEMBER, 1996, Month.JULY,
-                        "Аспирантура (программист С, С++)", " ")))); */
+                        "Аспирантура (программист С, С++)", " "))));
         return RESUME_1;
     }
 
