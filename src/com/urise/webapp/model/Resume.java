@@ -15,14 +15,14 @@ import java.util.UUID;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Resume implements Serializable  {
+public class Resume implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
     private Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
     private Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
 
-    private  String uuid;
+    private String uuid;
     private String fullName;
 
     public Resume(String fullName) {
@@ -58,6 +58,7 @@ public class Resume implements Serializable  {
     public AbstractSection getSection(SectionType type) {
         return sections.get(type);
     }
+
     public Map<ContactType, String> getContacts() {
         return contacts;
     }

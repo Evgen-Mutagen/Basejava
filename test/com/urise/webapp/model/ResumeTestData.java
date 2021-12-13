@@ -42,15 +42,19 @@ public class ResumeTestData {
         RESUME_1.addSection(SectionType.OBJECTIVE, objective);
 
         ListSection qualification = new ListSection(new ArrayList<>());
-        qualification.save("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
+        qualification.save("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss");
+        qualification.save("Tomcat, Jetty, WebLogic, WSO2");
         RESUME_1.addSection(SectionType.QUALIFICATIONS, qualification);
 
         ListSection achievement = new ListSection(new ArrayList<>());
-        achievement.save("С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", " +
-                "\"Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP)." +
-                " Удаленное взаимодействие (JMS/AKKA)\". Организация онлайн стажировок и " +
-                "ведение проектов. Более 1000 выпускников.");
+        achievement.save("С 2013 года: разработка проектов");
+        achievement.save("Разработка Web приложения");
+        achievement.save("Java Enterprise");
+        achievement.save("Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP).");
+        achievement.save( "Удаленное взаимодействие (JMS/AKKA).");
+        achievement.save("Оганизация онлайн стажировок и ведение проектов. Более 1000 выпускников.");
         RESUME_1.addSection(SectionType.ACHIEVEMENT, achievement);
+
 
         RESUME_1.addSection(SectionType.EXPERIENCE, new OrganizationSection(new Organization(
                 "Wrike", "https://www.wrike.com",
@@ -94,8 +98,17 @@ public class ResumeTestData {
         RESUME_3.addSection(SectionType.OBJECTIVE, objective3);
 
         ListSection achievement3 = new ListSection(new ArrayList<>());
-        achievement3.save("актёр, режиссёр, спортсмен");
+        achievement3.save("актёр");
+        achievement3.save("режиссёр");
+        achievement3.save("спортсмен");
         RESUME_3.addSection(SectionType.ACHIEVEMENT, achievement3);
+
+        ListSection qualification3 = new ListSection(new ArrayList<>());
+        qualification3.save("Продюсирование");
+        qualification3.save("Продюсирование2");
+        qualification3.save("Продюсирование3");
+        RESUME_3.addSection(SectionType.QUALIFICATIONS, qualification3);
+
         return  RESUME_3;
     }
 }

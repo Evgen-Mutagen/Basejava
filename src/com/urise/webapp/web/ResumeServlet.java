@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ResumeServlet extends HttpServlet {
     private Storage storage;
@@ -37,20 +38,30 @@ public class ResumeServlet extends HttpServlet {
         }
 
         for (SectionType type : SectionType.values()) {
+            String parameters = request.getParameter(type.name());
+            if (parameters == null) {
+                continue;
+            }
+            parameters = parameters.replaceAll("\n","");
+            List<String> notNull = new ArrayList<>();
+            for (String x : parameters.split("\n")) {
+                if (x.trim().length() > 0) {
+                    notNull.add(x);
+                }
+            }
+            if (notNull.size() == 0) {
+                r.getSections().remove(type);
+                continue;
+            }
+
             switch (type) {
                 case OBJECTIVE:
                 case PERSONAL:
-                    String inf = request.getParameter(type.name());
-                    r.addSection(type, new TextSection(inf));
+                    r.addSection(type, new TextSection(parameters));
                     break;
                 case ACHIEVEMENT:
                 case QUALIFICATIONS:
-                    String[] sections = request.getParameterValues(type.name());
-                    ListSection listSection = new ListSection(new ArrayList<>());
-                    for (String str : sections) {
-                        listSection.save(str);
-                    }
-                    r.addSection(type, listSection);
+                    r.addSection(type, new ListSection(notNull));
                     break;
             }
         }

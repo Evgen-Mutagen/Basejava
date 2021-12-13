@@ -1,6 +1,7 @@
 package com.urise.webapp.model;
 
 import java.io.Serial;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -11,6 +12,7 @@ public class ListSection extends AbstractSection {
     private List<String> list;
 
     public ListSection(List<String> list) {
+        Objects.requireNonNull(list, "list must not be null");
         this.list = list;
     }
 
@@ -20,6 +22,9 @@ public class ListSection extends AbstractSection {
 
     public List<String> getList() {
         return list;
+    }
+    public ListSection(String... items) {
+        this(Arrays.asList(items));
     }
 
     public ListSection() {
