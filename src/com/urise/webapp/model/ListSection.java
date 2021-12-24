@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class ListSection extends AbstractSection {
+    public static final ListSection NEW = new ListSection("");
     @Serial
     private static final long serialVersionUID = 1L;
 

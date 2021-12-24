@@ -2,6 +2,7 @@
 <%@ page import="com.urise.webapp.model.TextSection" %>
 <%@ page import="com.urise.webapp.model.ListSection" %>
 <%@ page import="com.urise.webapp.model.OrganizationSection" %>
+<%@ page import="com.urise.webapp.util.DateUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
@@ -14,65 +15,73 @@
 <body>
 <jsp:include page="fragments/header.jsp"/>
 <section>
-    <h1>${resume.fullName}&nbsp;<a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/pencil.png"></a></h1>
     <p>
         <c:forEach var="contactEntry" items="${resume.contacts}">
             <jsp:useBean id="contactEntry"
                          type="java.util.Map.Entry<com.urise.webapp.model.ContactType, java.lang.String>"/>
                 <%=contactEntry.getKey().toHtml(contactEntry.getValue())%><br/>
         </c:forEach>
-        <hr>
-
-        <c:forEach items="${resume.sections}" var="sectionEntry">
-             <jsp:useBean id="sectionEntry"
-                 type="java.util.Map.Entry<com.urise.webapp.model.SectionType, com.urise.webapp.model.AbstractSection>"/>
+    <p>
+    <hr>
+    <table  cellpadding="2">
+        <c:forEach var="sectionEntry" items="${resume.sections}">
+            <jsp:useBean id="sectionEntry"
+                         type="java.util.Map.Entry<com.urise.webapp.model.SectionType, com.urise.webapp.model.AbstractSection>"/>
+            <c:set var="type" value="${sectionEntry.key}"/>
+            <c:set var="section" value="${sectionEntry.value}"/>
+            <jsp:useBean id="section" type="com.urise.webapp.model.AbstractSection"/>
+            <tr>
+                <td colspan="2"><h2><a name="type.name">${type.title}</a></h2></td>
+            </tr>
             <c:choose>
-                <c:when test="${sectionEntry.key.name() == 'OBJECTIVE' ||sectionEntry.key.name() == 'PERSONAL'}">
-                    <dl style="width: 600px;">
-                        <dt>${sectionEntry.key.getTitle()}</dt>
-                        <dd><%=((TextSection) sectionEntry.getValue()).getTitle()%>
-                        </dd>
-                    </dl>
+                <c:when test="${type=='OBJECTIVE' || type=='PERSONAL'}">
+                    <tr>
+                        <td colspan="2">
+                            <h3><%=((TextSection) section).getTitle()%></h3>
+                        </td>
+                    </tr>
                 </c:when>
-                <c:when test="${sectionEntry.key.name() == 'ACHIEVEMENT' ||sectionEntry.key.name() == 'QUALIFICATIONS'}">
-                    <dl style="width: 600px;">
-                    <dt>${sectionEntry.key.getTitle()}</dt>
-                    <dl style="display: inline-grid;margin-left: 8px;vertical-align: top; padding-top: 0">
-                    <dt></dt>
-                    <c:forEach var="item" items="<%=((ListSection) sectionEntry.getValue()).getList()%>">
-                        <dd>${item}</dd>
-                        <hr>
-                    </c:forEach>
-                    </dl>
-                    </dl>
-                </c:when>
-                <c:when test="${sectionEntry.key.name() == 'EXPERIENCE' ||sectionEntry.key.name() == 'EDUCATION'}">
-                    <dl style="width: 600px;">
-                        <dt>${sectionEntry.key.getTitle()}</dt>
-                        <dl style="display: inline-block;margin-left: 8px;vertical-align: top; padding-top: 0;width: 350px;">
-                            <c:forEach var="org" items="<%=((OrganizationSection) sectionEntry.getValue()).getOrganizations()%>">
-                                <dt>Название организации</dt>
-                                <dd>${org.homePage.name}</dd>
-                                <dt>Сайт организации</dt>
-                                <dd>${org.homePage.url}</dd>
-                                <c:forEach var="pos" items="${org.positions}">
-                                    <hr>
-                                    <dt>Дата с</dt>
-                                    <dd>${pos.startDate}</dd>
-                                    <dt>Дата по</dt>
-                                    <dd>${pos.endDate}</dd>
-                                    <dt>Наименование</dt>
-                                    <dd>${pos.title}</dd>
-                                    <dt>Описание</dt>
-                                    <dd>${pos.description}</dd>
+                <c:when test="${type=='QUALIFICATIONS' || type=='ACHIEVEMENT'}">
+                    <tr>
+                        <td colspan="2">
+                            <ul>
+                                <c:forEach var="item" items="<%=((ListSection) section).getList()%>">
+                                    <li>${item}</li>
                                 </c:forEach>
-                            </c:forEach>
-                        </dl>
-                    </dl>
+                            </ul>
+                        </td>
+                    </tr>
+                </c:when>
+                <c:when test="${type=='EXPERIENCE' || type=='EDUCATION'}">
+                    <c:forEach var="org" items="<%=((OrganizationSection) section).getOrganizations()%>">
+                        <tr>
+                            <td colspan="2">
+                                <c:choose>
+                                    <c:when test="${empty org.homePage.url}">
+                                        <h3>${org.homePage.name}</h3>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <h3><a href="${org.homePage.url}">${org.homePage.name}</a></h3>
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                        </tr>
+                        <c:forEach var="pos" items="${org.positions}">
+                            <jsp:useBean id="pos" type="com.urise.webapp.model.Organization.Position"/>
+                            <tr>
+                                <td><b>${pos.title}</b><br>${pos.description}</td>
+                            </tr>
+                            <tr align = "center">
+                                <td> <%=DateUtil.formatDates(pos)%></td>
+                            </tr>
+                        </c:forEach>
+                    </c:forEach>
                 </c:when>
             </c:choose>
         </c:forEach>
-    <p>
+    </table>
+    <br/>
+    <button onclick="window.history.back()">Назад</button>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
 </body>

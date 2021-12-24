@@ -22,6 +22,15 @@ public class Resume implements Serializable {
     private Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
     private Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
 
+    public static final Resume NEWR = new Resume();
+    static {
+        NEWR.addSection(SectionType.OBJECTIVE, TextSection.NEW);
+        NEWR.addSection(SectionType.PERSONAL, TextSection.NEW);
+        NEWR.addSection(SectionType.ACHIEVEMENT, ListSection.NEW);
+        NEWR.addSection(SectionType.QUALIFICATIONS, ListSection.NEW);
+        NEWR.addSection(SectionType.EXPERIENCE, new OrganizationSection(Organization.NEW));
+        NEWR.addSection(SectionType.EDUCATION, new OrganizationSection(Organization.NEW));
+    }
     private String uuid;
     private String fullName;
 

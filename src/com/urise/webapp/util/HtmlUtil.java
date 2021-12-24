@@ -15,4 +15,9 @@ public class HtmlUtil {
                 section == null ? "" :
                         String.join("\n", ((ListSection) resume.getSection(type)).getList());
     }
+
+    public static boolean isEmpty(String str) {
+        return str == null || str.trim().length() == 0;
+    }
+
 }

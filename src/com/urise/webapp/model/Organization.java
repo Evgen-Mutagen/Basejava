@@ -21,7 +21,7 @@ import static com.urise.webapp.util.DateUtil.of;
 public class Organization implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public static final Organization EMPTY = new Organization("", "", Position.EMPTY);
+    public static final Organization NEW = new Organization("", "", Position.EMPTY);
 
     private Link homePage;
     private List<Position> positions = new ArrayList<>();
