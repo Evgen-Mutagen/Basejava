@@ -25,7 +25,7 @@ public class DateUtil {
     }
 
     public static String formatDates(Organization.Position position) {
-        return DateUtil.format(position.getStartDate()) + " - " + DateUtil.format(position.getEndDate());
+        return format(position.getStartDate()) + " - " + format(position.getEndDate());
     }
 
 }
