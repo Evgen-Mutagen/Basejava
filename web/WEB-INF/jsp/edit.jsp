@@ -1,4 +1,3 @@
-<%@ page import="com.urise.webapp.util.HtmlUtil" %>
 <%@ page import="com.urise.webapp.model.*" %>
 <%@ page import="com.urise.webapp.util.DateUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -34,10 +33,10 @@
             <h2><a>${type.title}</a></h2>
             <c:choose>
                 <c:when test="${type=='OBJECTIVE'}">
-                    <input type='text' name='${type}' size=75 value='<%=HtmlUtil.getTextCont(type, resume)%>'>
+                    <input type='text' name='${type}' size=75 value='<%=TextSection.getTextCont(type, resume)%>'>
                 </c:when>
                 <c:when test="${type=='PERSONAL'}">
-                    <textarea name='${type}' cols=75 rows=5><%=HtmlUtil.getTextCont(type, resume)%></textarea>
+                    <textarea name='${type}' cols=75 rows=5><%=TextSection.getTextCont(type, resume)%></textarea>
                 </c:when>
                 <c:when test="${type=='QUALIFICATIONS' || type=='ACHIEVEMENT'}">
                     <textarea name='${type}' cols=75

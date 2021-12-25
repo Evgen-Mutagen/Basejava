@@ -21,7 +21,7 @@ import static com.urise.webapp.util.DateUtil.of;
 public class Organization implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public static final Organization NEW = new Organization("", "", Position.EMPTY);
+    public static final Organization NEW = new Organization("", "", Position.NEWPOS);
 
     private Link homePage;
     private List<Position> positions = new ArrayList<>();
@@ -71,7 +71,7 @@ public class Organization implements Serializable {
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class Position implements Serializable {
-        public static final Position EMPTY = new Position();
+        public static final Position NEWPOS = new Position();
 
         @XmlJavaTypeAdapter(LocalDateAdapter.class)
         private LocalDate startDate;

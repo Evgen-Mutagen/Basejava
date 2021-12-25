@@ -18,6 +18,11 @@ public class TextSection extends AbstractSection {
     public TextSection() {
     }
 
+    public static String getTextCont(SectionType type, Resume resume) {
+        AbstractSection section = resume.getSection(type);
+        return section == null ? "" : ((TextSection) resume.getSection(type)).getTitle();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

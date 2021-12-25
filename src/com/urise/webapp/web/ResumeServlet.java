@@ -4,7 +4,6 @@ import com.urise.webapp.Config;
 import com.urise.webapp.model.*;
 import com.urise.webapp.storage.Storage;
 import com.urise.webapp.util.DateUtil;
-import com.urise.webapp.util.HtmlUtil;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -17,19 +16,23 @@ import java.util.List;
 
 public class ResumeServlet extends HttpServlet {
     private Storage storage;
+    private String str;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         storage = Config.get().getStorage();
     }
+    public static boolean isEmpty(String str) {
+        return str == null || str.trim().length() == 0;
+    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String uuid = request.getParameter("uuid");
         String fullName = request.getParameter("fullName");
-        final boolean isCreate = (uuid == null || uuid.length() == 0);
         Resume r;
+        final boolean isCreate = (uuid == null || uuid.length() == 0);
 
         if (isCreate) {
             r = new Resume(fullName);
@@ -40,7 +43,7 @@ public class ResumeServlet extends HttpServlet {
 
         for (ContactType type : ContactType.values()) {
             String value = request.getParameter(type.name());
-            if (HtmlUtil.isEmpty(value)) {
+            if (isEmpty(value)) {
                 r.getContacts().remove(type);
             } else {
                 r.addContact(type, value);
@@ -49,7 +52,7 @@ public class ResumeServlet extends HttpServlet {
         for (SectionType type : SectionType.values()) {
             String value = request.getParameter(type.name());
             String[] values = request.getParameterValues(type.name());
-            if (HtmlUtil.isEmpty(value)) {
+            if (isEmpty(value)) {
                 r.getSections().remove(type);
             } else {
                 switch (type) {
@@ -67,7 +70,7 @@ public class ResumeServlet extends HttpServlet {
                         String[] urls = request.getParameterValues(type.name() + "url");
                         for (int i = 0; i < values.length; i++) {
                             String name = values[i];
-                            if (!HtmlUtil.isEmpty(name)) {
+                            if (!isEmpty(name)) {
                                 List<Organization.Position> positions = new ArrayList<>();
                                 String pfx = type.name() + i;
                                 String[] startDates = request.getParameterValues(pfx + "startDate");
@@ -75,7 +78,7 @@ public class ResumeServlet extends HttpServlet {
                                 String[] titles = request.getParameterValues(pfx + "title");
                                 String[] descriptions = request.getParameterValues(pfx + "description");
                                 for (int j = 0; j < titles.length; j++) {
-                                    if (!HtmlUtil.isEmpty(titles[j])) {
+                                    if (!isEmpty(titles[j])) {
                                         positions.add(new Organization.Position(DateUtil.parse(startDates[j]), DateUtil.parse(endDates[j]), titles[j], descriptions[j]));
                                     }
                                 }
@@ -140,7 +143,7 @@ public class ResumeServlet extends HttpServlet {
                                 if (orgSection != null) {
                                     for (Organization org : orgSection.getOrganizations()) {
                                         List<Organization.Position> emptyFirstPositions = new ArrayList<>();
-                                        emptyFirstPositions.add(Organization.Position.EMPTY);
+                                        emptyFirstPositions.add(Organization.Position.NEWPOS);
                                         emptyFirstPositions.addAll(org.getPositions());
                                         emptyFirstOrganizations.add(new Organization(org.getHomePage(), emptyFirstPositions));
                                     }

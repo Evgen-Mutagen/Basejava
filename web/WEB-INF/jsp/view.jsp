@@ -1,4 +1,3 @@
-<%@ page import="com.urise.webapp.util.HtmlUtil" %>
 <%@ page import="com.urise.webapp.model.TextSection" %>
 <%@ page import="com.urise.webapp.model.ListSection" %>
 <%@ page import="com.urise.webapp.model.OrganizationSection" %>
