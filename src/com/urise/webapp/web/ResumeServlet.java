@@ -16,7 +16,6 @@ import java.util.List;
 
 public class ResumeServlet extends HttpServlet {
     private Storage storage;
-    private String str;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -52,7 +51,7 @@ public class ResumeServlet extends HttpServlet {
         for (SectionType type : SectionType.values()) {
             String value = request.getParameter(type.name());
             String[] values = request.getParameterValues(type.name());
-            if (isEmpty(value)) {
+            if (isEmpty(value) && values.length < 2) {
                 r.getSections().remove(type);
             } else {
                 switch (type) {
